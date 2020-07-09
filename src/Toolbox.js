@@ -1,16 +1,12 @@
 import React from "react";
 import "./Toolbox.css";
+import Pin from "./Pin";
 
 function Toolbox() {
   return (
     <div className="toolbox">
       <div className="slot">
-        <img
-          className="slot-img"
-          draggable="true"
-          src="pin.png"
-          alt="Push Pin"
-        />
+        <Pin />
       </div>
       <div className="slot">
         <img className="slot-img" src="thread.png" alt="Thread" />

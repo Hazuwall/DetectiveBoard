@@ -1,8 +1,8 @@
 import React from "react";
 import { useDrop } from "react-dnd";
 import "./Board.css";
-import Toolbox from "./Toolbox";
-import { ItemTypes } from "./Constants";
+import Toolbox from "./Toolbar";
+import { ItemTypes } from "../constants/ItemTypes";
 
 function Board() {
   const [{ isOver }, drop] = useDrop({

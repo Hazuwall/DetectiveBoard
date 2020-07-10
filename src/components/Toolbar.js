@@ -1,5 +1,5 @@
 import React from "react";
-import "./Toolbox.css";
+import "./Toolbar.css";
 import Pin from "./Pin";
 
 function Toolbox() {

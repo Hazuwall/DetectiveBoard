@@ -1,4 +1,4 @@
-import { ItemTypes } from "./Constants";
+import { ItemTypes } from "../constants/ItemTypes";
 import { useDrag } from "react-dnd";
 import React from "react";
 

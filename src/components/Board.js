@@ -5,7 +5,7 @@ import "./Board.css";
 import { ItemTypes } from "../constants/ItemTypes";
 import Pin from "./Pin";
 import { moveItem, addPin } from "../actions";
-import { ToolbarModes } from "../constants/ToolbarModes";
+import { ToolTypes } from "../constants/ToolTypes";
 
 const mapStateToProps = (state) => {
   return { stateProps: state };
@@ -40,7 +40,7 @@ const Board = connect(
   console.log("render");
 
   const handleClick = (e) => {
-    if (stateProps.toolbarMode === ToolbarModes.ADD_PIN_MODE) {
+    if (stateProps.toolType === ToolTypes.ADD_PIN_TOOL) {
       boundAddPin(e.clientX, e.clientY);
     }
   };

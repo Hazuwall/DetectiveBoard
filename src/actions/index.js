@@ -6,17 +6,22 @@ export const addPin = (x, y) => ({
   y,
 });
 
-export const moveNode = (id, x, y) => ({
+export const toggleTool = (toolType) => ({
+  type: ActionTypes.TOGGLE_TOOL,
+  toolType,
+});
+
+export const moveItem = (id, itemType, x, y) => ({
+  type: ActionTypes.MOVE_ITEM,
   id,
-  type: ActionTypes.MOVE_NODE,
+  itemType,
   x,
   y,
 });
 
-export const moveItem = (id, type, x, y) => ({
+export const moveNode = (id, x, y) => ({
+  type: ActionTypes.MOVE_NODE,
   id,
-  type: ActionTypes.MOVE_ITEM,
-  itemType: type,
   x,
   y,
 });

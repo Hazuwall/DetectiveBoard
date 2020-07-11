@@ -5,6 +5,11 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { moveNode } from "../actions";
 import "./DraggableItemBox.css";
+import { ToolTypes } from "../constants/ToolTypes";
+
+const mapStateToProps = (state) => {
+  return { canDrag: state.toolType === ToolTypes.MOVE_TOOL };
+};
 
 const mapDispatchToProps = (dispatch) => {
   return {
@@ -15,11 +20,12 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 const DraggableItemBox = connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
-)(({ id, pos, handleDrag, children }) => {
+)(({ id, pos, canDrag, handleDrag, children }) => {
   const [{ isDragging, initialPos, dragPos }, drag] = useDrag({
     item: { type: ItemTypes.PIN, id },
+    canDrag: () => canDrag,
     collect: (monitor) => ({
       dragPos: monitor.getSourceClientOffset(),
       isDragging: !!monitor.isDragging(),
@@ -41,6 +47,7 @@ const DraggableItemBox = connect(
         left: pos.x,
         top: pos.y,
         opacity: isDragging ? 0.5 : 1,
+        cursor: canDrag ? "move" : "auto",
       }}
       ref={drag}
     >

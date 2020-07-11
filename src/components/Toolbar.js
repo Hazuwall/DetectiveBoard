@@ -1,21 +1,15 @@
 import React from "react";
 import "./Toolbar.css";
-import Pin from "./Pin";
+import Tool from "./Tool";
+import { ToolTypes } from "../constants/ToolTypes";
 
-function Toolbox() {
+const Toolbar = () => {
   return (
-    <div className="toolbox">
-      <div className="slot">
-        <Pin />
-      </div>
-      <div className="slot">
-        <img className="slot-img" src="thread.png" alt="Thread" />
-      </div>
-      <div className="slot">
-        <img className="slot-img" src="picture.png" alt="Upload Picture" />
-      </div>
+    <div className="toolbar">
+      <Tool text="Move" toolType={ToolTypes.MOVE_TOOL} />
+      <Tool text="AddPin" toolType={ToolTypes.ADD_PIN_TOOL} />
     </div>
   );
-}
+};
 
-export default Toolbox;
+export default Toolbar;

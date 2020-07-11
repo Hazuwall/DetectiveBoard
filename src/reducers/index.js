@@ -1,10 +1,10 @@
 import { ActionTypes } from "../constants/ActionTypes";
 import { ItemTypes } from "../constants/ItemTypes";
-import { ToolbarModes } from "../constants/ToolbarModes";
+import { ToolTypes } from "../constants/ToolTypes";
 
 export default function reducer(
   state = {
-    toolbarMode: ToolbarModes.ADD_PIN_MODE,
+    toolType: ToolTypes.MOVE_TOOL,
     [ItemTypes.PIN]: [
       {
         id: 0,
@@ -46,6 +46,15 @@ export default function reducer(
             y: action.y,
           },
         ],
+      };
+
+    case ActionTypes.TOGGLE_TOOL:
+      return {
+        ...state,
+        toolType:
+          state.toolType === action.toolType
+            ? ToolTypes.NO_TOOL
+            : action.toolType,
       };
 
     case ActionTypes.MOVE_ITEM:

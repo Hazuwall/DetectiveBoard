@@ -1,26 +1,26 @@
-import { ItemTypes } from "../constants/ItemTypes";
-import { useDrag } from "react-dnd";
 import React from "react";
+import PropTypes from "prop-types";
+import DraggableItemBox from "./DraggableItemBox";
 
-function Pin() {
-  const [{ isDragging }, drag] = useDrag({
-    item: { type: ItemTypes.PIN },
-    collect: (monitor) => ({
-      isDragging: !!monitor.isDragging(),
-    }),
-  });
-
+function Pin({ id, pos }) {
   return (
-    <div
-      ref={drag}
-      style={{
-        opacity: isDragging ? 0.5 : 1,
-        cursor: "move",
-      }}
-    >
-      <img className="slot-img" src="pin.png" alt="Push Pin" />
-    </div>
+    <DraggableItemBox id={id} pos={pos}>
+      <svg
+        width="100px"
+        height="100px"
+        viewBox="0 0 120 120"
+        version="1.1"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <circle cx="60" cy="60" r="60" />
+      </svg>
+    </DraggableItemBox>
   );
 }
+
+Pin.propTypes = {
+  id: PropTypes.number.isRequired,
+  pos: PropTypes.object.isRequired,
+};
 
 export default Pin;

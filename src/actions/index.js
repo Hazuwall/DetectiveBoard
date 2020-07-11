@@ -1,14 +1,22 @@
 import { ActionTypes } from "../constants/ActionTypes";
 
-export const addPin = (left, top) => ({
+export const addPin = (x, y) => ({
   type: ActionTypes.ADD_PIN,
-  left,
-  top,
+  x,
+  y,
 });
 
-export const moveItem = (id, left, top) => ({
+export const moveNode = (id, x, y) => ({
+  id,
+  type: ActionTypes.MOVE_NODE,
+  x,
+  y,
+});
+
+export const moveItem = (id, type, x, y) => ({
   id,
   type: ActionTypes.MOVE_ITEM,
-  left,
-  top,
+  itemType: type,
+  x,
+  y,
 });

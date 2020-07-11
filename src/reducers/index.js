@@ -4,26 +4,29 @@ import { ToolTypes } from "../constants/ToolTypes";
 
 function pointerToolReducer(state, action) {
   switch (state.toolType) {
+    case ToolTypes.REMOVE_TOOL:
+      const nodes =
+        action.itemType === ItemTypes.PIN
+          ? state.nodes.filter((t) => t.id !== action.id)
+          : state.nodes;
+      return {
+        ...state,
+        [action.itemType]: state[action.itemType].filter(
+          (t) => t.id !== action.id
+        ),
+        nodes,
+      };
+
+    default:
+      return state;
   }
 }
 
 export default function reducer(
   state = {
     toolType: ToolTypes.MOVE_TOOL,
-    [ItemTypes.PIN]: [
-      {
-        id: 0,
-        x: 200,
-        y: 200,
-      },
-    ],
-    nodes: [
-      {
-        id: 0,
-        x: 200,
-        y: 200,
-      },
-    ],
+    [ItemTypes.PIN]: [],
+    nodes: [],
   },
   action
 ) {
@@ -52,6 +55,9 @@ export default function reducer(
           },
         ],
       };
+
+    case ActionTypes.APPLY_POINTER_TOOL:
+      return pointerToolReducer(state, action);
 
     case ActionTypes.TOGGLE_TOOL:
       return {

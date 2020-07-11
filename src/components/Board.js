@@ -6,6 +6,7 @@ import { ItemTypes } from "../constants/ItemTypes";
 import Pin from "./Pin";
 import { moveItem, addPin } from "../actions";
 import { ToolTypes } from "../constants/ToolTypes";
+import Rope from "./Rope";
 
 const mapStateToProps = (state) => {
   return { stateProps: state };
@@ -20,6 +21,11 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(addPin(x, y));
     },
   };
+};
+
+const getNodePos = (id, nodes) => {
+  const node = nodes.find((t) => t.id === id);
+  return { x: node.x, y: node.y };
 };
 
 const Board = connect(
@@ -37,7 +43,6 @@ const Board = connect(
       boundMoveItem(id, type, targetPos);
     },
   });
-  console.log("render");
 
   const handleClick = (e) => {
     if (stateProps.toolType === ToolTypes.ADD_PIN_TOOL) {
@@ -47,6 +52,22 @@ const Board = connect(
 
   return (
     <div onClick={handleClick} ref={drop} className="board">
+      <svg
+        className="svg-container"
+        viewBox="0 0 800 800"
+        version="1.1"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        {stateProps[ItemTypes.ROPE].map((item) => {
+          return (
+            <Rope
+              key={item.id}
+              start={getNodePos(item.startNodeId, stateProps.nodes)}
+              end={getNodePos(item.endNodeId, stateProps.nodes)}
+            />
+          );
+        })}
+      </svg>
       {stateProps[ItemTypes.PIN].map((item) => {
         return <Pin key={item.id} id={item.id} x={item.x} y={item.y} />;
       })}

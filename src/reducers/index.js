@@ -17,6 +17,32 @@ function pointerToolReducer(state, action) {
         nodes,
       };
 
+    case ToolTypes.TIE_ROPE_TOOL:
+      if (
+        action.itemType === ItemTypes.PIN &&
+        state.startNodeId !== action.id
+      ) {
+        if (state.startNodeId === null)
+          return { ...state, startNodeId: action.id };
+        else {
+          const ropes = state[ItemTypes.ROPE];
+          const id =
+            ropes.reduce((maxId, item) => Math.max(item.id, maxId), 0) + 1;
+          return {
+            ...state,
+            startNodeId: null,
+            [ItemTypes.ROPE]: [
+              ...ropes,
+              {
+                id,
+                startNodeId: state.startNodeId,
+                endNodeId: action.id,
+              },
+            ],
+          };
+        }
+      } else return state;
+
     default:
       return state;
   }
@@ -25,8 +51,10 @@ function pointerToolReducer(state, action) {
 export default function reducer(
   state = {
     toolType: ToolTypes.MOVE_TOOL,
+    startNodeId: null,
     [ItemTypes.PIN]: [],
     nodes: [],
+    [ItemTypes.ROPE]: [],
   },
   action
 ) {
@@ -35,7 +63,7 @@ export default function reducer(
     case ActionTypes.ADD_PIN:
       const pins = state[ItemTypes.PIN];
       const nodes = state.nodes;
-      const id = pins.reduce((maxId, item) => Math.max(item.id, maxId), -1) + 1;
+      const id = pins.reduce((maxId, item) => Math.max(item.id, maxId), 0) + 1;
       return {
         ...state,
         [ItemTypes.PIN]: [
@@ -62,6 +90,7 @@ export default function reducer(
     case ActionTypes.TOGGLE_TOOL:
       return {
         ...state,
+        startNodeId: null,
         toolType:
           state.toolType === action.toolType
             ? ToolTypes.NO_TOOL

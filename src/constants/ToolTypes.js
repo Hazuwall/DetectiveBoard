@@ -3,12 +3,9 @@ export const ToolTypes = {
   MOVE_TOOL: "MOVE_TOOL",
   NO_TOOL: "NO_TOOL",
   REMOVE_TOOL: "REMOVE_TOOL",
+  TIE_ROPE_TOOL: "TIE_ROPE_TOOL",
 };
 
 export const isPointerTool = (tool) => {
-  return (
-    tool !== ToolTypes.MOVE_TOOL &&
-    tool !== ToolTypes.NO_TOOL &&
-    tool !== ToolTypes.ADD_PIN_TOOL
-  );
+  return tool === ToolTypes.REMOVE_TOOL || tool === ToolTypes.TIE_ROPE_TOOL;
 };

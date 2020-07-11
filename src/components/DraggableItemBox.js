@@ -53,7 +53,7 @@ const DraggableItemBox = connect(
     });
 
     useEffect(() => {
-      if (dragPos) handleDrag(id, dragPos.x, dragPos.y);
+      //if (dragPos) handleDrag(id, dragPos.x, dragPos.y);
     }, [id, dragPos, handleDrag]);
 
     let cursor;

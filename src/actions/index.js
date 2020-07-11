@@ -6,6 +6,12 @@ export const addPin = (x, y) => ({
   y,
 });
 
+export const applyPointerTool = (id, itemType) => ({
+  type: ActionTypes.APPLY_POINTER_TOOL,
+  id,
+  itemType,
+});
+
 export const toggleTool = (toolType) => ({
   type: ActionTypes.TOGGLE_TOOL,
   toolType,

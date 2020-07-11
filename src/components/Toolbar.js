@@ -8,6 +8,7 @@ const Toolbar = () => {
     <div className="toolbar">
       <Tool text="Move" toolType={ToolTypes.MOVE_TOOL} />
       <Tool text="AddPin" toolType={ToolTypes.ADD_PIN_TOOL} />
+      <Tool text="Remove" toolType={ToolTypes.REMOVE_TOOL} />
     </div>
   );
 };

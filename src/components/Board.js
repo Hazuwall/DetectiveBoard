@@ -48,9 +48,7 @@ const Board = connect(
   return (
     <div onClick={handleClick} ref={drop} className="board">
       {stateProps[ItemTypes.PIN].map((item) => {
-        return (
-          <Pin id={item.id} key={item.id} pos={{ x: item.x, y: item.y }} />
-        );
+        return <Pin key={item.id} id={item.id} x={item.x} y={item.y} />;
       })}
     </div>
   );

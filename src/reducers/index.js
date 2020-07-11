@@ -2,6 +2,11 @@ import { ActionTypes } from "../constants/ActionTypes";
 import { ItemTypes } from "../constants/ItemTypes";
 import { ToolTypes } from "../constants/ToolTypes";
 
+function pointerToolReducer(state, action) {
+  switch (state.toolType) {
+  }
+}
+
 export default function reducer(
   state = {
     toolType: ToolTypes.MOVE_TOOL,

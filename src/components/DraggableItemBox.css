@@ -1,4 +1,4 @@
 .draggable-item-box {
-  position: relative;
+  position: absolute;
   cursor: move;
 }

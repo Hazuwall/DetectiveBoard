@@ -1,8 +1,10 @@
 import { ActionTypes } from "../constants/ActionTypes";
 import { ItemTypes } from "../constants/ItemTypes";
+import { ToolbarModes } from "../constants/ToolbarModes";
 
 export default function reducer(
   state = {
+    toolbarMode: ToolbarModes.ADD_PIN_MODE,
     [ItemTypes.PIN]: [
       {
         id: 0,

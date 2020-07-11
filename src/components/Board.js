@@ -2,21 +2,22 @@ import React from "react";
 import { useDrop } from "react-dnd";
 import { connect } from "react-redux";
 import "./Board.css";
-import Toolbar from "./Toolbar";
 import { ItemTypes } from "../constants/ItemTypes";
 import Pin from "./Pin";
-import { moveItem } from "../actions";
+import { moveItem, addPin } from "../actions";
+import { ToolbarModes } from "../constants/ToolbarModes";
 
 const mapStateToProps = (state) => {
-  return {
-    pins: state[ItemTypes.PIN],
-  };
+  return { stateProps: state };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onDrop: (id, type, pos) => {
+    boundMoveItem: (id, type, pos) => {
       dispatch(moveItem(id, type, pos.x, pos.y));
+    },
+    boundAddPin: (x, y) => {
+      dispatch(addPin(x, y));
     },
   };
 };
@@ -24,7 +25,7 @@ const mapDispatchToProps = (dispatch) => {
 const Board = connect(
   mapStateToProps,
   mapDispatchToProps
-)(({ onDrop, pins }) => {
+)(({ boundMoveItem, boundAddPin, stateProps }) => {
   const [{ isOver }, drop] = useDrop({
     accept: ItemTypes.PIN,
     collect: (mon) => ({
@@ -33,14 +34,20 @@ const Board = connect(
     drop: (item, monitor) => {
       const { id, type } = monitor.getItem();
       const targetPos = monitor.getSourceClientOffset();
-      onDrop(id, type, targetPos);
+      boundMoveItem(id, type, targetPos);
     },
   });
   console.log("render");
 
+  const handleClick = (e) => {
+    if (stateProps.toolbarMode === ToolbarModes.ADD_PIN_MODE) {
+      boundAddPin(e.clientX, e.clientY);
+    }
+  };
+
   return (
-    <div ref={drop} className="board">
-      {pins.map((item) => {
+    <div onClick={handleClick} ref={drop} className="board">
+      {stateProps[ItemTypes.PIN].map((item) => {
         return (
           <Pin id={item.id} key={item.id} pos={{ x: item.x, y: item.y }} />
         );

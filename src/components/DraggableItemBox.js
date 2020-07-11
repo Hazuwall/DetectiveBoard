@@ -8,7 +8,7 @@ import "./DraggableItemBox.css";
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onDrag: (id, pos) => {
+    handleDrag: (id, pos) => {
       dispatch(moveNode(id, pos.x, pos.y));
     },
   };
@@ -17,7 +17,7 @@ const mapDispatchToProps = (dispatch) => {
 const DraggableItemBox = connect(
   null,
   mapDispatchToProps
-)(({ id, pos, onDrag, children }) => {
+)(({ id, pos, handleDrag, children }) => {
   const [{ isDragging, initialPos, dragPos }, drag] = useDrag({
     item: { type: ItemTypes.PIN, id },
     collect: (monitor) => ({
@@ -26,13 +26,13 @@ const DraggableItemBox = connect(
       initialPos: monitor.getInitialSourceClientOffset(),
     }),
     end: (item, monitor) => {
-      onDrag(id, pos);
+      handleDrag(id, pos);
     },
   });
 
   useEffect(() => {
-    if (dragPos) onDrag(0, dragPos);
-  }, [dragPos, onDrag]);
+    if (dragPos) handleDrag(0, dragPos);
+  }, [dragPos, handleDrag]);
 
   return (
     <div

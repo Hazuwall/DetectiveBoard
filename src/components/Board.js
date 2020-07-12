@@ -57,7 +57,15 @@ const Board = connect(
         })}
       </svg>
       {items[ItemTypes.PIN].map((item) => {
-        return <Pin key={item.id} id={item.id} x={item.x} y={item.y} />;
+        return (
+          <Pin
+            key={item.id}
+            id={item.id}
+            x={item.x}
+            y={item.y}
+            isSelected={item.isSelected}
+          />
+        );
       })}
     </div>
   );

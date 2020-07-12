@@ -26,43 +26,57 @@ const mapDispatchToProps = (dispatch) => {
 const DraggableItemBox = connect(
   mapStateToProps,
   mapDispatchToProps
-)(({ id, itemType, x, y, canSelect, onDrag, onSelect, children }) => {
-  const [{ isDragging }, drag] = useDrag({
-    item: { type: itemType, id },
-    collect: (monitor) => ({
-      isDragging: !!monitor.isDragging(),
-    }),
-    end: (item, monitor) => {
-      onDrag(id, x, y);
-    },
-  });
+)(
+  ({
+    id,
+    itemType,
+    x,
+    y,
+    isSelected,
+    canSelect,
+    onDrag,
+    onSelect,
+    children,
+  }) => {
+    const [{ isDragging }, drag] = useDrag({
+      item: { type: itemType, id },
+      collect: (monitor) => ({
+        isDragging: !!monitor.isDragging(),
+      }),
+      end: (item, monitor) => {
+        onDrag(id, x, y);
+      },
+    });
 
-  const handleClick = (e) => {
-    onSelect(itemType, id);
-    e.stopPropagation();
-  };
+    const handleClick = (e) => {
+      onSelect(itemType, id);
+      e.stopPropagation();
+    };
 
-  return (
-    <div
-      className="draggable-item-box"
-      onClick={handleClick}
-      style={{
-        left: x,
-        top: y,
-        opacity: isDragging ? 0.5 : 1,
-        cursor: canSelect ? "pointer" : "move",
-      }}
-      ref={drag}
-    >
-      {children}
-    </div>
-  );
-});
+    return (
+      <div
+        className="draggable-item-box"
+        onClick={handleClick}
+        style={{
+          left: x,
+          top: y,
+          opacity: isDragging ? 0.5 : 1,
+          cursor: canSelect ? "pointer" : "move",
+          backgroundColor: isSelected ? "red" : "white",
+        }}
+        ref={drag}
+      >
+        {children}
+      </div>
+    );
+  }
+);
 
 DraggableItemBox.propTypes = {
   id: PropTypes.number.isRequired,
   x: PropTypes.number.isRequired,
   y: PropTypes.number.isRequired,
+  isSelected: PropTypes.bool.isRequired,
   itemType: PropTypes.string.isRequired,
   children: PropTypes.node.isRequired,
 };

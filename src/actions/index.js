@@ -9,10 +9,10 @@ export const addPin = (x, y) => ({
 });
 
 export const clickSpaceWithTool = (x, y) => (dispatch, getState) => {
-  if (getState().board.toolType === ToolTypes.ADD_PIN_TOOL)
+  const boardState = getState().board;
+  if (boardState.toolType === ToolTypes.ADD_PIN_TOOL)
     return dispatch(addPin(x, y));
-  else if (getState().board.selectedItem !== null)
-    return dispatch(unselectItem());
+  else if (boardState.selectedItem !== null) return dispatch(unselectItem());
 };
 
 export const addRope = (node1, node2) => ({
@@ -63,21 +63,20 @@ function containsRope(ropes, node1, node2) {
 
 export const selectItemWithTool = (id, itemType) => (dispatch, getState) => {
   const state = getState();
-  const boardState = state.board;
-  switch (boardState.toolType) {
+  const selectedItem = state.items.selectedItem;
+  switch (state.board.toolType) {
     case ToolTypes.REMOVE_TOOL:
       return dispatch(removeItem(id, itemType));
 
     case ToolTypes.TIE_ROPE_TOOL:
       if (
         itemType === ItemTypes.PIN &&
-        boardState.selectedItem !== null &&
-        boardState.selectedItem.itemType === ItemTypes.PIN &&
-        boardState.selectedItem.id !== id
+        selectedItem !== null &&
+        selectedItem.itemType === ItemTypes.PIN &&
+        selectedItem.id !== id
       ) {
-        const id2 = boardState.selectedItem.id;
-        if (!containsRope(state.items[ItemTypes.ROPE], id, id2))
-          dispatch(addRope(id, id2));
+        if (!containsRope(state.items[ItemTypes.ROPE], id, selectedItem.id))
+          dispatch(addRope(id, selectedItem.id));
       }
       return dispatch(selectItem(id, itemType));
 
@@ -86,6 +85,8 @@ export const selectItemWithTool = (id, itemType) => (dispatch, getState) => {
   }
 };
 
-export const unselectItem = () => ({
+export const unselectItem = (id, itemType) => ({
   type: ActionTypes.UNSELECT_ITEM,
+  id,
+  itemType,
 });

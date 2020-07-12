@@ -1,8 +1,13 @@
 import { ActionTypes } from "../constants/ActionTypes";
 import { ItemTypes } from "../constants/ItemTypes";
 
+function setSelection(items, id, isSelected) {
+  return items.map((item) => (item.id === id ? { ...item, isSelected } : item));
+}
+
 export default function items(
   state = {
+    selectedItem: null,
     [ItemTypes.PIN]: [],
     nodes: [],
     [ItemTypes.ROPE]: [],
@@ -22,6 +27,7 @@ export default function items(
             id,
             x: action.x,
             y: action.y,
+            isSelected: false,
           },
         ],
         nodes: [
@@ -84,6 +90,66 @@ export default function items(
           ),
         };
       }
+
+    case ActionTypes.SELECT_ITEM: {
+      const selectedItem = {
+        id: action.id,
+        itemType: action.itemType,
+      };
+      const oldSelectedItem = state.selectedItem;
+      if (oldSelectedItem !== null) {
+        const unselectedList = setSelection(
+          state[oldSelectedItem.itemType],
+          oldSelectedItem.id,
+          false
+        );
+        if (oldSelectedItem.itemType === action.itemType) {
+          return {
+            ...state,
+            selectedItem,
+            [action.itemType]: setSelection(unselectedList, action.id, true),
+          };
+        } else {
+          return {
+            ...state,
+            selectedItem,
+            [action.itemType]: setSelection(
+              state[action.itemType],
+              action.id,
+              true
+            ),
+            [state.selectedItem.itemType]: unselectedList,
+          };
+        }
+      } else
+        return {
+          ...state,
+          selectedItem,
+          [action.itemType]: setSelection(
+            state[action.itemType],
+            action.id,
+            true
+          ),
+        };
+    }
+
+    case ActionTypes.UNSELECT_ITEM:
+    case ActionTypes.TOGGLE_TOOL: {
+      const oldSelectedItem = state.selectedItem;
+      if (state.selectedItem === null) {
+        return state;
+      } else {
+        return {
+          ...state,
+          selectedItem: null,
+          [oldSelectedItem.itemType]: setSelection(
+            state[oldSelectedItem.itemType],
+            oldSelectedItem.id,
+            false
+          ),
+        };
+      }
+    }
 
     default:
       return state;

@@ -93,7 +93,7 @@ export default function reducer(
         startNodeId: null,
         toolType:
           state.toolType === action.toolType
-            ? ToolTypes.NO_TOOL
+            ? ToolTypes.MOVE_TOOL
             : action.toolType,
       };
 

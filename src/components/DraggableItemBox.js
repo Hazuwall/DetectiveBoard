@@ -8,7 +8,6 @@ import { ToolTypes, isPointerTool } from "../constants/ToolTypes";
 
 const mapStateToProps = (state) => {
   return {
-    canDrag: state.toolType === ToolTypes.MOVE_TOOL,
     isPointerToolActive: isPointerTool(state.toolType),
   };
 };
@@ -33,7 +32,6 @@ const DraggableItemBox = connect(
     itemType,
     x,
     y,
-    canDrag,
     isPointerToolActive,
     handleDrag,
     handleClick,
@@ -41,7 +39,6 @@ const DraggableItemBox = connect(
   }) => {
     const [{ isDragging, initialPos, dragPos }, drag] = useDrag({
       item: { type: itemType, id },
-      canDrag: () => canDrag,
       collect: (monitor) => ({
         dragPos: monitor.getSourceClientOffset(),
         isDragging: !!monitor.isDragging(),
@@ -56,11 +53,6 @@ const DraggableItemBox = connect(
       //if (dragPos) handleDrag(id, dragPos.x, dragPos.y);
     }, [id, dragPos, handleDrag]);
 
-    let cursor;
-    if (canDrag) cursor = "move";
-    else if (isPointerToolActive) cursor = "pointer";
-    else cursor = "auto";
-
     return (
       <div
         className="draggable-item-box"
@@ -69,7 +61,7 @@ const DraggableItemBox = connect(
           left: x,
           top: y,
           opacity: isDragging ? 0.5 : 1,
-          cursor: cursor,
+          cursor: isPointerToolActive ? "pointer" : "move",
         }}
         ref={drag}
       >

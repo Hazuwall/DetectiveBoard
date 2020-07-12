@@ -5,17 +5,25 @@ import { ToolTypes } from "../constants/ToolTypes";
 function pointerToolReducer(state, action) {
   switch (state.toolType) {
     case ToolTypes.REMOVE_TOOL:
-      const nodes =
-        action.itemType === ItemTypes.PIN
-          ? state.nodes.filter((t) => t.id !== action.id)
-          : state.nodes;
-      return {
-        ...state,
-        [action.itemType]: state[action.itemType].filter(
-          (t) => t.id !== action.id
-        ),
-        nodes,
-      };
+      if (action.itemType === ItemTypes.PIN) {
+        return {
+          ...state,
+          [action.itemType]: state[action.itemType].filter(
+            (t) => t.id !== action.id
+          ),
+          nodes: state.nodes.filter((t) => t.id !== action.id),
+          [ItemTypes.ROPE]: state[ItemTypes.ROPE].filter(
+            (t) => t.startNodeId !== action.id && t.endNodeId !== action.id
+          ),
+        };
+      } else {
+        return {
+          ...state,
+          [action.itemType]: state[action.itemType].filter(
+            (t) => t.id !== action.id
+          ),
+        };
+      }
 
     case ToolTypes.TIE_ROPE_TOOL:
       if (
@@ -26,6 +34,15 @@ function pointerToolReducer(state, action) {
           return { ...state, startNodeId: action.id };
         else {
           const ropes = state[ItemTypes.ROPE];
+          const isDuplicate = ropes.some(
+            (t) =>
+              (t.startNodeId === state.startNodeId &&
+                t.endNodeId === action.id) ||
+              (t.startNodeId === action.id && t.endNodeId === state.startNodeId)
+          );
+          if (isDuplicate) {
+            return { ...state, startNodeId: null };
+          }
           const id =
             ropes.reduce((maxId, item) => Math.max(item.id, maxId), 0) + 1;
           return {

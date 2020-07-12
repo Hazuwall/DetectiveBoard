@@ -45,8 +45,11 @@ const DraggableItemBox = connect(
         isDragging: !!monitor.isDragging(),
       }),
       end: (item, monitor) => {
-        const { delta } = monitor.getDropResult();
-        onDrag(id, itemType, x + delta.x, y + delta.y);
+        const result = monitor.getDropResult();
+        if (result) {
+          const delta = result.delta;
+          onDrag(id, itemType, x + delta.x, y + delta.y);
+        }
       },
     });
 

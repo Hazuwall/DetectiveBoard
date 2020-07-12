@@ -50,6 +50,7 @@ export default function items(
             id: ropes.reduce((maxId, item) => Math.max(item.id, maxId), 0) + 1,
             node1: action.node1,
             node2: action.node2,
+            isSelected: false,
           },
         ],
       };

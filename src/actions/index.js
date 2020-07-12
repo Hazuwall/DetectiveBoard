@@ -69,16 +69,18 @@ export const selectItemWithTool = (id, itemType) => (dispatch, getState) => {
       return dispatch(removeItem(id, itemType));
 
     case ToolTypes.TIE_ROPE_TOOL:
-      if (
-        itemType === ItemTypes.PIN &&
-        selectedItem !== null &&
-        selectedItem.itemType === ItemTypes.PIN &&
-        selectedItem.id !== id
-      ) {
-        if (!containsRope(state.items[ItemTypes.ROPE], id, selectedItem.id))
-          dispatch(addRope(id, selectedItem.id));
+      if (itemType === ItemTypes.PIN) {
+        if (
+          selectedItem !== null &&
+          selectedItem.itemType === ItemTypes.PIN &&
+          selectedItem.id !== id
+        ) {
+          if (!containsRope(state.items[ItemTypes.ROPE], id, selectedItem.id))
+            dispatch(addRope(id, selectedItem.id));
+        }
+        return dispatch(selectItem(id, itemType));
       }
-      return dispatch(selectItem(id, itemType));
+      return;
 
     default:
       return;

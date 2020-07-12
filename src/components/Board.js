@@ -50,8 +50,10 @@ const Board = connect(
           return (
             <Rope
               key={item.id}
-              start={getNodePos(item.node1, items.nodes)}
-              end={getNodePos(item.node2, items.nodes)}
+              id={item.id}
+              node1={getNodePos(item.node1, items.nodes)}
+              node2={getNodePos(item.node2, items.nodes)}
+              isSelected={item.isSelected}
             />
           );
         })}

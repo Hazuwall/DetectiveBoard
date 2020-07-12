@@ -62,7 +62,6 @@ const DraggableItemBox = connect(
           top: y,
           opacity: isDragging ? 0.5 : 1,
           cursor: canSelect ? "pointer" : "move",
-          backgroundColor: isSelected ? "red" : "white",
         }}
         ref={drag}
       >

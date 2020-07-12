@@ -13,13 +13,10 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onDrop: (item, monitor) => {
-      const { id, type } = monitor.getItem();
-      const pos = monitor.getSourceClientOffset();
-      dispatch(moveItem(id, type, pos.x, pos.y));
-    },
     onClick: (e) => {
-      dispatch(clickSpaceWithTool(e.clientX, e.clientY));
+      dispatch(
+        clickSpaceWithTool(e.nativeEvent.offsetX, e.nativeEvent.offsetY)
+      );
     },
   };
 };
@@ -35,7 +32,11 @@ const Board = connect(
 )(({ onDrop, onClick, items }) => {
   const [, drop] = useDrop({
     accept: ItemTypes.PIN,
-    drop: onDrop,
+    drop: (item, monitor) => {
+      const { id, type } = monitor.getItem();
+      const delta = monitor.getDifferenceFromInitialOffset();
+      return { delta };
+    },
   });
 
   return (

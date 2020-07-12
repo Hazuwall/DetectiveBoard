@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { ItemTypes } from "../constants/ItemTypes";
 import { selectItemWithTool } from "../actions";
 import { ToolTypes } from "../constants/ToolTypes";
+import "./Rope.css";
 
 const mapStateToProps = (state) => {
   return {
@@ -30,8 +31,8 @@ const Rope = connect(
 
   return (
     <line
+      className="rope"
       onClick={handleClick}
-      strokeWidth="5"
       x1={node1.x}
       y1={node1.y}
       x2={node2.x}

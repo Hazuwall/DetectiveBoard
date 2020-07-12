@@ -2,7 +2,7 @@ import { useDrag } from "react-dnd";
 import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { moveNode, selectItemWithTool } from "../actions";
+import { moveItem, moveNode, selectItemWithTool } from "../actions";
 import "./DraggableItemBox.css";
 import { isSelectTool } from "../constants/ToolTypes";
 
@@ -14,10 +14,11 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onDrag: (id, x, y) => {
+    onDrag: (id, itemType, x, y) => {
+      dispatch(moveItem(id, itemType, x, y));
       dispatch(moveNode(id, x, y));
     },
-    onSelect: (itemType, id) => {
+    onSelect: (id, itemType) => {
       dispatch(selectItemWithTool(id, itemType));
     },
   };
@@ -44,12 +45,13 @@ const DraggableItemBox = connect(
         isDragging: !!monitor.isDragging(),
       }),
       end: (item, monitor) => {
-        onDrag(id, x, y);
+        const { delta } = monitor.getDropResult();
+        onDrag(id, itemType, x + delta.x, y + delta.y);
       },
     });
 
     const handleClick = (e) => {
-      onSelect(itemType, id);
+      onSelect(id, itemType);
       e.stopPropagation();
     };
 

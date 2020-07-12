@@ -73,7 +73,7 @@ export default function items(
           ),
           nodes: state.nodes.filter((t) => t.id !== action.id),
           [ItemTypes.ROPE]: state[ItemTypes.ROPE].filter(
-            (t) => t.startNodeId !== action.id && t.endNodeId !== action.id
+            (t) => t.node1 !== action.id && t.node2 !== action.id
           ),
         };
       } else {

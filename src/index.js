@@ -2,14 +2,16 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import { createStore } from "redux";
+import { createStore, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
+import thunk from "redux-thunk";
+import logger from "redux-logger";
 import reducer from "./reducers";
 import "./index.css";
 import App from "./components/App";
 import * as serviceWorker from "./serviceWorker";
 
-const store = createStore(reducer);
+const store = createStore(reducer, applyMiddleware(thunk, logger));
 
 ReactDOM.render(
   <React.StrictMode>

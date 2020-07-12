@@ -1,24 +1,24 @@
 import { useDrag } from "react-dnd";
-import React, { useEffect } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { moveNode, applyPointerTool } from "../actions";
+import { moveNode, selectItemWithTool } from "../actions";
 import "./DraggableItemBox.css";
-import { ToolTypes, isPointerTool } from "../constants/ToolTypes";
+import { isSelectTool } from "../constants/ToolTypes";
 
 const mapStateToProps = (state) => {
   return {
-    isPointerToolActive: isPointerTool(state.toolType),
+    canSelect: isSelectTool(state.board.toolType),
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    handleDrag: (...args) => {
-      dispatch(moveNode(...args));
+    onDrag: (id, x, y) => {
+      dispatch(moveNode(id, x, y));
     },
-    handleClick: (isPointerToolActive, ...args) => {
-      if (isPointerToolActive) dispatch(applyPointerTool(...args));
+    onSelect: (itemType, id) => {
+      dispatch(selectItemWithTool(id, itemType));
     },
   };
 };
@@ -26,50 +26,38 @@ const mapDispatchToProps = (dispatch) => {
 const DraggableItemBox = connect(
   mapStateToProps,
   mapDispatchToProps
-)(
-  ({
-    id,
-    itemType,
-    x,
-    y,
-    isPointerToolActive,
-    handleDrag,
-    handleClick,
-    children,
-  }) => {
-    const [{ isDragging, initialPos, dragPos }, drag] = useDrag({
-      item: { type: itemType, id },
-      collect: (monitor) => ({
-        dragPos: monitor.getSourceClientOffset(),
-        isDragging: !!monitor.isDragging(),
-        initialPos: monitor.getInitialSourceClientOffset(),
-      }),
-      end: (item, monitor) => {
-        handleDrag(id, x, y);
-      },
-    });
+)(({ id, itemType, x, y, canSelect, onDrag, onSelect, children }) => {
+  const [{ isDragging }, drag] = useDrag({
+    item: { type: itemType, id },
+    collect: (monitor) => ({
+      isDragging: !!monitor.isDragging(),
+    }),
+    end: (item, monitor) => {
+      onDrag(id, x, y);
+    },
+  });
 
-    useEffect(() => {
-      //if (dragPos) handleDrag(id, dragPos.x, dragPos.y);
-    }, [id, dragPos, handleDrag]);
+  const handleClick = (e) => {
+    onSelect(itemType, id);
+    e.stopPropagation();
+  };
 
-    return (
-      <div
-        className="draggable-item-box"
-        onClick={() => handleClick(isPointerToolActive, id, itemType)}
-        style={{
-          left: x,
-          top: y,
-          opacity: isDragging ? 0.5 : 1,
-          cursor: isPointerToolActive ? "pointer" : "move",
-        }}
-        ref={drag}
-      >
-        {children}
-      </div>
-    );
-  }
-);
+  return (
+    <div
+      className="draggable-item-box"
+      onClick={handleClick}
+      style={{
+        left: x,
+        top: y,
+        opacity: isDragging ? 0.5 : 1,
+        cursor: canSelect ? "pointer" : "move",
+      }}
+      ref={drag}
+    >
+      {children}
+    </div>
+  );
+});
 
 DraggableItemBox.propTypes = {
   id: PropTypes.number.isRequired,

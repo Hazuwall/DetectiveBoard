@@ -5,6 +5,6 @@ export const ToolTypes = {
   TIE_ROPE_TOOL: "TIE_ROPE_TOOL",
 };
 
-export const isPointerTool = (tool) => {
+export const isSelectTool = (tool) => {
   return tool === ToolTypes.REMOVE_TOOL || tool === ToolTypes.TIE_ROPE_TOOL;
 };

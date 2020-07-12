@@ -5,12 +5,12 @@ import "./Toolbar.css";
 import { toggleTool } from "../actions";
 
 const mapStateToProps = (state) => {
-  return { currentToolType: state.toolType };
+  return { currentToolType: state.board.toolType };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    boundToggleTool: (type) => {
+    onToggle: (type) => {
       dispatch(toggleTool(type));
     },
   };
@@ -19,18 +19,14 @@ const mapDispatchToProps = (dispatch) => {
 const Tool = connect(
   mapStateToProps,
   mapDispatchToProps
-)(({ boundToggleTool, currentToolType, toolType, text }) => {
-  const handleClick = () => {
-    boundToggleTool(toolType);
-  };
-
+)(({ onToggle, currentToolType, toolType, text }) => {
   return (
     <div>
       <button
         style={{
           backgroundColor: toolType === currentToolType ? "red" : "grey",
         }}
-        onClick={handleClick}
+        onClick={() => onToggle(toolType)}
       >
         {text}
       </button>

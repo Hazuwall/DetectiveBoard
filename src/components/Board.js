@@ -4,21 +4,22 @@ import { connect } from "react-redux";
 import "./Board.css";
 import { ItemTypes } from "../constants/ItemTypes";
 import Pin from "./Pin";
-import { moveItem, addPin } from "../actions";
-import { ToolTypes } from "../constants/ToolTypes";
+import { moveItem, clickSpaceWithTool } from "../actions";
 import Rope from "./Rope";
 
 const mapStateToProps = (state) => {
-  return { stateProps: state };
+  return { items: state.items };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    boundMoveItem: (id, type, pos) => {
+    onDrop: (item, monitor) => {
+      const { id, type } = monitor.getItem();
+      const pos = monitor.getSourceClientOffset();
       dispatch(moveItem(id, type, pos.x, pos.y));
     },
-    boundAddPin: (x, y) => {
-      dispatch(addPin(x, y));
+    onClick: (e) => {
+      dispatch(clickSpaceWithTool(e.clientX, e.clientY));
     },
   };
 };
@@ -31,44 +32,31 @@ const getNodePos = (id, nodes) => {
 const Board = connect(
   mapStateToProps,
   mapDispatchToProps
-)(({ boundMoveItem, boundAddPin, stateProps }) => {
-  const [{ isOver }, drop] = useDrop({
+)(({ onDrop, onClick, items }) => {
+  const [, drop] = useDrop({
     accept: ItemTypes.PIN,
-    collect: (mon) => ({
-      isOver: !!mon.isOver(),
-    }),
-    drop: (item, monitor) => {
-      const { id, type } = monitor.getItem();
-      const targetPos = monitor.getSourceClientOffset();
-      boundMoveItem(id, type, targetPos);
-    },
+    drop: onDrop,
   });
 
-  const handleClick = (e) => {
-    if (stateProps.toolType === ToolTypes.ADD_PIN_TOOL) {
-      boundAddPin(e.clientX, e.clientY);
-    }
-  };
-
   return (
-    <div onClick={handleClick} ref={drop} className="board">
+    <div onClick={onClick} ref={drop} className="board">
       <svg
         className="svg-container"
         viewBox="0 0 800 800"
         version="1.1"
         xmlns="http://www.w3.org/2000/svg"
       >
-        {stateProps[ItemTypes.ROPE].map((item) => {
+        {items[ItemTypes.ROPE].map((item) => {
           return (
             <Rope
               key={item.id}
-              start={getNodePos(item.startNodeId, stateProps.nodes)}
-              end={getNodePos(item.endNodeId, stateProps.nodes)}
+              start={getNodePos(item.node1, items.nodes)}
+              end={getNodePos(item.node2, items.nodes)}
             />
           );
         })}
       </svg>
-      {stateProps[ItemTypes.PIN].map((item) => {
+      {items[ItemTypes.PIN].map((item) => {
         return <Pin key={item.id} id={item.id} x={item.x} y={item.y} />;
       })}
     </div>

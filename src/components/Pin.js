@@ -5,13 +5,7 @@ import { ItemTypes } from "../constants/ItemTypes";
 
 function Pin({ id, x, y, isSelected }) {
   return (
-    <DraggableItemBox
-      id={id}
-      itemType={ItemTypes.PIN}
-      x={x}
-      y={y}
-      isSelected={isSelected}
-    >
+    <DraggableItemBox id={id} itemType={ItemTypes.PIN} x={x} y={y}>
       <svg
         width="25px"
         height="25px"

@@ -8,6 +8,12 @@ export default function board(
   action
 ) {
   switch (action.type) {
+    case ActionTypes.ADD_IMAGES:
+      return {
+        ...state,
+        toolType: ToolTypes.MOVE_TOOL,
+      };
+
     case ActionTypes.TOGGLE_TOOL:
       return {
         ...state,

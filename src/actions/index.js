@@ -2,6 +2,13 @@ import { ActionTypes } from "../constants/ActionTypes";
 import { ItemTypes } from "../constants/ItemTypes";
 import { ToolTypes } from "../constants/ToolTypes";
 
+export const addPhotos = (urls, x = 300, y = 300) => ({
+  type: ActionTypes.ADD_PHOTOS,
+  urls,
+  x,
+  y,
+});
+
 export const addPin = (x, y) => ({
   type: ActionTypes.ADD_PIN,
   x,
@@ -47,6 +54,18 @@ export const removeItem = (id, itemType) => ({
   itemType,
 });
 
+export const removeItemWithDisposal = (id, itemType) => (
+  dispatch,
+  getState
+) => {
+  if (itemType === ItemTypes.PHOTO) {
+    const img = getState().items[ItemTypes.PHOTO].find((t) => t.id === id);
+    const result = dispatch(removeItem(id, itemType));
+    if (img && img.url.startsWith("blob")) URL.revokeObjectURL(img.url);
+    return result;
+  } else dispatch(removeItem(id, itemType));
+};
+
 export const selectItem = (id, itemType) => ({
   type: ActionTypes.SELECT_ITEM,
   id,
@@ -66,7 +85,7 @@ export const selectItemWithTool = (id, itemType) => (dispatch, getState) => {
   const selectedItem = state.items.selectedItem;
   switch (state.board.toolType) {
     case ToolTypes.REMOVE_TOOL:
-      return dispatch(removeItem(id, itemType));
+      return dispatch(removeItemWithDisposal(id, itemType));
 
     case ToolTypes.TIE_ROPE_TOOL:
       if (itemType === ItemTypes.PIN) {

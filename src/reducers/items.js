@@ -11,10 +11,30 @@ export default function items(
     [ItemTypes.PIN]: [],
     nodes: [],
     [ItemTypes.ROPE]: [],
+    [ItemTypes.PHOTO]: [],
   },
   action
 ) {
   switch (action.type) {
+    case ActionTypes.ADD_PHOTOS: {
+      const images = state[ItemTypes.PHOTO];
+      let id = images.reduce((maxId, item) => Math.max(item.id, maxId), 0) + 1;
+      let x = action.x;
+      let y = action.y;
+      const newImages = action.urls.map((url) => {
+        const image = { id, x, y, url, isSelected: false };
+        id++;
+        x += 20;
+        y += 20;
+        return image;
+      });
+
+      return {
+        ...state,
+        [ItemTypes.PHOTO]: images.concat(newImages),
+      };
+    }
+
     case ActionTypes.ADD_PIN:
       const pins = state[ItemTypes.PIN];
       const nodes = state.nodes;

@@ -1,11 +1,12 @@
 import React from "react";
 import { useDrop } from "react-dnd";
 import { connect } from "react-redux";
-import "./Board.css";
 import { ItemTypes } from "../constants/ItemTypes";
+import { clickSpaceWithTool } from "../actions";
+import "./Board.css";
 import Pin from "./Pin";
-import { moveItem, clickSpaceWithTool } from "../actions";
 import Rope from "./Rope";
+import Photo from "./Photo";
 
 const mapStateToProps = (state) => {
   return { items: state.items };
@@ -31,9 +32,8 @@ const Board = connect(
   mapDispatchToProps
 )(({ onDrop, onClick, items }) => {
   const [, drop] = useDrop({
-    accept: ItemTypes.PIN,
+    accept: [ItemTypes.PIN, ItemTypes.PHOTO],
     drop: (item, monitor) => {
-      const { id, type } = monitor.getItem();
       const delta = monitor.getDifferenceFromInitialOffset();
       return { delta };
     },
@@ -41,6 +41,18 @@ const Board = connect(
 
   return (
     <div onClick={onClick} ref={drop} className="board">
+      {items[ItemTypes.PHOTO].map((item) => {
+        return (
+          <Photo
+            key={ItemTypes.PHOTO + item.id}
+            id={item.id}
+            x={item.x}
+            y={item.y}
+            url={item.url}
+            isSelected={item.isSelected}
+          />
+        );
+      })}
       <svg
         className="svg-container"
         viewBox="0 0 800 800"
@@ -62,7 +74,7 @@ const Board = connect(
       {items[ItemTypes.PIN].map((item) => {
         return (
           <Pin
-            key={item.id}
+            key={ItemTypes.PIN + item.id}
             id={item.id}
             x={item.x}
             y={item.y}

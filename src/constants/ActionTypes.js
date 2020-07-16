@@ -1,4 +1,5 @@
 export const ActionTypes = {
+  ADD_PHOTOS: "ADD_PHOTOS",
   ADD_PIN: "ADD_PIN",
   ADD_ROPE: "ADD_ROPE",
   TOGGLE_TOOL: "TOGGLE_TOOL",

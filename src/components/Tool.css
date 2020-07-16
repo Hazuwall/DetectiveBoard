@@ -1,0 +1,11 @@
+.tool {
+  background-color: gray;
+}
+
+.tool:hover {
+  background-color: cadetblue;
+}
+
+.tool_active {
+  background-color: darkcyan;
+}

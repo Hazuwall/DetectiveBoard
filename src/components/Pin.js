@@ -3,9 +3,10 @@ import PropTypes from "prop-types";
 import DraggableItemBox from "./DraggableItemBox";
 import { ItemTypes } from "../constants/ItemTypes";
 
-function Pin({ id, x, y, isSelected }) {
+function Pin(props) {
+  const { isSelected, ...others } = props;
   return (
-    <DraggableItemBox id={id} itemType={ItemTypes.PIN} x={x} y={y}>
+    <DraggableItemBox {...others} itemType={ItemTypes.PIN}>
       <svg
         width="25px"
         height="25px"
@@ -21,10 +22,19 @@ function Pin({ id, x, y, isSelected }) {
 }
 
 Pin.propTypes = {
+  isSelected: PropTypes.bool,
+
   id: PropTypes.number.isRequired,
   x: PropTypes.number.isRequired,
   y: PropTypes.number.isRequired,
-  isSelected: PropTypes.bool.isRequired,
+  canDrag: PropTypes.bool,
+  canSelect: PropTypes.bool,
+  onDrag: PropTypes.func,
+  onSelect: PropTypes.func,
+};
+
+Pin.defaultProps = {
+  isSelected: false,
 };
 
 export default Pin;

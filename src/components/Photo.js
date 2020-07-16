@@ -4,20 +4,30 @@ import "./Photo.css";
 import DraggableItemBox from "./DraggableItemBox";
 import { ItemTypes } from "../constants/ItemTypes";
 
-function Photo({ id, x, y, url, isSelected }) {
+function Photo(props) {
+  const { url, isSelected, ...others } = props;
   return (
-    <DraggableItemBox id={id} itemType={ItemTypes.PHOTO} x={x} y={y}>
+    <DraggableItemBox {...others} itemType={ItemTypes.PHOTO}>
       <img className="photo" alt="" src={url} />
     </DraggableItemBox>
   );
 }
 
 Photo.propTypes = {
+  url: PropTypes.string.isRequired,
+  isSelected: PropTypes.bool.isRequired,
+
   id: PropTypes.number.isRequired,
   x: PropTypes.number.isRequired,
   y: PropTypes.number.isRequired,
-  url: PropTypes.string.isRequired,
-  isSelected: PropTypes.bool.isRequired,
+  canDrag: PropTypes.bool,
+  canSelect: PropTypes.bool,
+  onDrag: PropTypes.func,
+  onSelect: PropTypes.func,
+};
+
+Photo.defaultProps = {
+  isSelected: false,
 };
 
 export default Photo;

@@ -1,13 +1,13 @@
 import React, { useRef } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import { addPhotosFromFiles } from "../actions";
+import { uploadFiles } from "../actions";
 import Tool from "./Tool";
 
 const mapDispatchToProps = (dispatch) => {
   return {
     onUpload: (files) => {
-      dispatch(addPhotosFromFiles(files));
+      dispatch(uploadFiles(files));
     },
   };
 };

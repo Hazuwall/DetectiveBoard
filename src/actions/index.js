@@ -9,7 +9,7 @@ export const addPhotos = (urls, x, y) => ({
   y,
 });
 
-export const addPhotosFromFiles = (files) => (dispatch, getState) => {
+export const uploadFiles = (files) => (dispatch, getState) => {
   if (files.length !== 0) {
     const urls = [];
     for (let i = 0; i < files.length; i++) {
@@ -34,10 +34,10 @@ export const clickSpaceWithTool = (x, y) => (dispatch, getState) => {
   else if (boardState.selectedItem !== null) return dispatch(unselectItem());
 };
 
-export const addRope = (node1, node2) => ({
+export const addRope = (knot1, knot2) => ({
   type: ActionTypes.ADD_ROPE,
-  node1,
-  node2,
+  knot1,
+  knot2,
 });
 
 export const clearBoard = () => ({
@@ -49,19 +49,12 @@ export const toggleTool = (toolType) => ({
   toolType,
 });
 
-export const moveItem = (id, itemType, x, y) => ({
+export const moveItem = (id, itemType, dx, dy) => ({
   type: ActionTypes.MOVE_ITEM,
   id,
   itemType,
-  x,
-  y,
-});
-
-export const moveNode = (id, x, y) => ({
-  type: ActionTypes.MOVE_NODE,
-  id,
-  x,
-  y,
+  dx,
+  dy,
 });
 
 export const removeItem = (id, itemType) => ({
@@ -121,6 +114,13 @@ export const selectItemWithTool = (id, itemType) => (dispatch, getState) => {
       return;
   }
 };
+
+export const updateKnot = (id, x, y) => ({
+  type: ActionTypes.UPDATE_KNOT,
+  id,
+  x,
+  y,
+});
 
 export const unselectItem = (id, itemType) => ({
   type: ActionTypes.UNSELECT_ITEM,

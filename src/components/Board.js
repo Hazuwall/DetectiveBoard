@@ -3,9 +3,9 @@ import { useDrop } from "react-dnd";
 import { connect } from "react-redux";
 import { ItemTypes } from "../constants/ItemTypes";
 import {
-  addPhotosFromFiles,
+  uploadFiles,
   moveItem,
-  moveNode,
+  updateKnot,
   selectItemWithTool,
   clickSpaceWithTool,
 } from "../actions";
@@ -21,22 +21,27 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onClick: (e) => {
-      dispatch(
-        clickSpaceWithTool(e.nativeEvent.offsetX, e.nativeEvent.offsetY)
-      );
+    onClick: (x, y) => {
+      dispatch(clickSpaceWithTool(x, y));
     },
     onUpload: (files) => {
-      dispatch(addPhotosFromFiles(files));
+      dispatch(uploadFiles(files));
     },
     onItemDrag: (id, itemType, x, y) => {
-      dispatch(moveItem(id, itemType, x, y));
-      if (itemType === ItemTypes.PIN) dispatch(moveNode(id, x, y));
+      if (itemType === ItemTypes.PIN) dispatch(updateKnot(id, x, y));
+    },
+    onItemDragAndDrop: (id, itemType, dx, dy) => {
+      dispatch(moveItem(id, itemType, dx, dy));
     },
     onItemSelect: (id, itemType) => {
       dispatch(selectItemWithTool(id, itemType));
     },
   };
+};
+
+const getKnotPos = (id, knots) => {
+  const knot = knots.find((t) => t.id === id);
+  return { x: knot.x, y: knot.y };
 };
 
 const createElements = (itemType, items, itemPermissions, onDrag, onSelect) => {
@@ -48,8 +53,8 @@ const createElements = (itemType, items, itemPermissions, onDrag, onSelect) => {
         {
           ...props,
           key: props.id,
-          node1: getNodePos(props.node1, items.nodes),
-          node2: getNodePos(props.node2, items.nodes),
+          knot1: getKnotPos(props.knot1, items.knots),
+          knot2: getKnotPos(props.knot2, items.knots),
           canSelect,
           onSelect,
         },
@@ -77,23 +82,18 @@ const createElements = (itemType, items, itemPermissions, onDrag, onSelect) => {
   }
 };
 
-const getNodePos = (id, nodes) => {
-  const node = nodes.find((t) => t.id === id);
-  return { x: node.x, y: node.y };
-};
-
 const Board = connect(
   mapStateToProps,
   mapDispatchToProps
 )(
   ({
-    onDrop,
+    items,
+    itemPermissions,
     onUpload,
     onClick,
     onItemDrag,
+    onItemDragAndDrop,
     onItemSelect,
-    items,
-    itemPermissions,
   }) => {
     const [, drop] = useDrop({
       accept: [ItemTypes.PIN, ItemTypes.PHOTO, NativeTypes.FILE],
@@ -101,13 +101,18 @@ const Board = connect(
         if (!item.type || item.type === NativeTypes.FILE) {
           onUpload(item.files);
         } else {
-          return { delta: monitor.getDifferenceFromInitialOffset() };
+          const delta = monitor.getDifferenceFromInitialOffset();
+          onItemDragAndDrop(item.id, item.type, delta.x, delta.y);
         }
       },
     });
 
     return (
-      <div onClick={onClick} ref={drop} className="board">
+      <div
+        onClick={(e) => onClick(e.nativeEvent.offsetX, e.nativeEvent.offsetY)}
+        ref={drop}
+        className="board"
+      >
         {createElements(
           ItemTypes.PHOTO,
           items,

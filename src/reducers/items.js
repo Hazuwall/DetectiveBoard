@@ -4,7 +4,7 @@ import { ItemTypes } from "../constants/ItemTypes";
 const emptyState = {
   selectedItem: null,
   [ItemTypes.PIN]: [],
-  nodes: [],
+  knots: [],
   [ItemTypes.ROPE]: [],
   [ItemTypes.PHOTO]: [],
 };
@@ -36,7 +36,7 @@ export default function items(state = emptyState, action) {
 
     case ActionTypes.ADD_PIN:
       const pins = state[ItemTypes.PIN];
-      const nodes = state.nodes;
+      const knots = state.knots;
       const id = pins.reduce((maxId, item) => Math.max(item.id, maxId), 0) + 1;
       return {
         ...state,
@@ -49,8 +49,8 @@ export default function items(state = emptyState, action) {
             isSelected: false,
           },
         ],
-        nodes: [
-          ...nodes,
+        knots: [
+          ...knots,
           {
             id,
             x: action.x,
@@ -67,8 +67,8 @@ export default function items(state = emptyState, action) {
           ...ropes,
           {
             id: ropes.reduce((maxId, item) => Math.max(item.id, maxId), 0) + 1,
-            node1: action.node1,
-            node2: action.node2,
+            knot1: action.knot1,
+            knot2: action.knot2,
             isSelected: false,
           },
         ],
@@ -78,18 +78,26 @@ export default function items(state = emptyState, action) {
       return emptyState;
 
     case ActionTypes.MOVE_ITEM:
+      if (action.itemType === ItemTypes.PIN) {
+        let { x, y } = state[action.itemType].find((t) => t.id === action.id);
+        x += action.dx;
+        y += action.dy;
+        return {
+          ...state,
+          [action.itemType]: state[action.itemType].map((t) =>
+            t.id === action.id ? { ...t, x, y } : t
+          ),
+          knots: state.knots.map((t) =>
+            t.id === action.id ? { ...t, x, y } : t
+          ),
+        };
+      }
       return {
         ...state,
-        [action.itemType]: state[action.itemType].map((item) =>
-          item.id === action.id ? { ...item, x: action.x, y: action.y } : item
-        ),
-      };
-
-    case ActionTypes.MOVE_NODE:
-      return {
-        ...state,
-        nodes: state.nodes.map((item) =>
-          item.id === action.id ? { ...item, x: action.x, y: action.y } : item
+        [action.itemType]: state[action.itemType].map((t) =>
+          t.id === action.id
+            ? { ...t, x: t.x + action.dx, y: t.y + action.dy }
+            : t
         ),
       };
 
@@ -100,9 +108,9 @@ export default function items(state = emptyState, action) {
           [action.itemType]: state[action.itemType].filter(
             (t) => t.id !== action.id
           ),
-          nodes: state.nodes.filter((t) => t.id !== action.id),
+          knots: state.knots.filter((t) => t.id !== action.id),
           [ItemTypes.ROPE]: state[ItemTypes.ROPE].filter(
-            (t) => t.node1 !== action.id && t.node2 !== action.id
+            (t) => t.knot1 !== action.id && t.knot2 !== action.id
           ),
         };
       } else {
@@ -155,6 +163,15 @@ export default function items(state = emptyState, action) {
           ),
         };
     }
+
+    // TODO: skip intermediate idempotent actions
+    case ActionTypes.UPDATE_KNOT:
+      return {
+        ...state,
+        knots: state.knots.map((item) =>
+          item.id === action.id ? { ...item, x: action.x, y: action.y } : item
+        ),
+      };
 
     case ActionTypes.UNSELECT_ITEM:
     case ActionTypes.TOGGLE_TOOL: {

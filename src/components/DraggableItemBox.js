@@ -1,4 +1,4 @@
-import { useDrag } from "react-dnd";
+import { useDrag, DragPreviewImage } from "react-dnd";
 import React from "react";
 import PropTypes from "prop-types";
 import "./DraggableItemBox.css";
@@ -14,18 +14,21 @@ const DraggableItemBox = ({
   onDrag,
   onSelect,
 }) => {
-  const [{ isDragging }, drag] = useDrag({
+  const [{ isDragging, relativeCursorOffset }, drag, preview] = useDrag({
     item: { type: itemType, id },
     canDrag: !!canDrag,
-    collect: (monitor) => ({
-      isDragging: !!monitor.isDragging(),
-    }),
-    end: (item, monitor) => {
-      const result = monitor.getDropResult();
-      if (result) {
-        const delta = result.delta;
-        onDrag(id, itemType, x + delta.x, y + delta.y);
-      }
+    collect: (monitor) => {
+      const initialSourceClientOffset = monitor.getInitialSourceClientOffset();
+      const initialClientOffset = monitor.getInitialClientOffset();
+      return {
+        relativeCursorOffset: initialSourceClientOffset
+          ? {
+              x: initialClientOffset.x - initialSourceClientOffset.x,
+              y: initialClientOffset.y - initialSourceClientOffset.y,
+            }
+          : null,
+        isDragging: !!monitor.isDragging(),
+      };
     },
   });
 
@@ -34,6 +37,13 @@ const DraggableItemBox = ({
       onSelect(id, itemType);
       e.stopPropagation();
     }
+  };
+
+  const handleDrag = (e) => {
+    const targetX = x + e.nativeEvent.offsetX - relativeCursorOffset.x;
+    const targetY = y + e.nativeEvent.offsetY - relativeCursorOffset.y;
+    if (targetX > 0 && targetY > 0) onDrag(id, itemType, targetX, targetY);
+    else onDrag(id, itemType, x, y);
   };
 
   let modifier;
@@ -53,7 +63,9 @@ const DraggableItemBox = ({
         top: y,
       }}
       ref={drag}
+      onDrag={handleDrag}
     >
+      <DragPreviewImage connect={preview} src="" />
       {children}
     </div>
   );

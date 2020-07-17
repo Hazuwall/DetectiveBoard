@@ -3,6 +3,7 @@ import { useDrop } from "react-dnd";
 import { connect } from "react-redux";
 import { ItemTypes } from "../constants/ItemTypes";
 import {
+  addPhotosFromFiles,
   moveItem,
   moveNode,
   selectItemWithTool,
@@ -12,6 +13,7 @@ import "./Board.css";
 import Pin from "./Pin";
 import Rope from "./Rope";
 import Photo from "./Photo";
+import { NativeTypes } from "react-dnd-html5-backend";
 
 const mapStateToProps = (state) => {
   return { items: state.items, itemPermissions: state.board.itemPermissions };
@@ -23,6 +25,9 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(
         clickSpaceWithTool(e.nativeEvent.offsetX, e.nativeEvent.offsetY)
       );
+    },
+    onUpload: (files) => {
+      dispatch(addPhotosFromFiles(files));
     },
     onItemDrag: (id, itemType, x, y) => {
       dispatch(moveItem(id, itemType, x, y));
@@ -80,47 +85,60 @@ const getNodePos = (id, nodes) => {
 const Board = connect(
   mapStateToProps,
   mapDispatchToProps
-)(({ onDrop, onClick, onItemDrag, onItemSelect, items, itemPermissions }) => {
-  const [, drop] = useDrop({
-    accept: [ItemTypes.PIN, ItemTypes.PHOTO],
-    drop: (item, monitor) => {
-      const delta = monitor.getDifferenceFromInitialOffset();
-      return { delta };
-    },
-  });
+)(
+  ({
+    onDrop,
+    onUpload,
+    onClick,
+    onItemDrag,
+    onItemSelect,
+    items,
+    itemPermissions,
+  }) => {
+    const [, drop] = useDrop({
+      accept: [ItemTypes.PIN, ItemTypes.PHOTO, NativeTypes.FILE],
+      drop: (item, monitor) => {
+        if (!item.type || item.type === NativeTypes.FILE) {
+          onUpload(item.files);
+        } else {
+          return { delta: monitor.getDifferenceFromInitialOffset() };
+        }
+      },
+    });
 
-  return (
-    <div onClick={onClick} ref={drop} className="board">
-      {createElements(
-        ItemTypes.PHOTO,
-        items,
-        itemPermissions,
-        onItemDrag,
-        onItemSelect
-      )}
-      <svg
-        className="svg-container"
-        viewBox="0 0 800 800"
-        version="1.1"
-        xmlns="http://www.w3.org/2000/svg"
-      >
+    return (
+      <div onClick={onClick} ref={drop} className="board">
         {createElements(
-          ItemTypes.ROPE,
+          ItemTypes.PHOTO,
           items,
           itemPermissions,
           onItemDrag,
           onItemSelect
         )}
-      </svg>
-      {createElements(
-        ItemTypes.PIN,
-        items,
-        itemPermissions,
-        onItemDrag,
-        onItemSelect
-      )}
-    </div>
-  );
-});
+        <svg
+          className="svg-container"
+          viewBox="0 0 800 800"
+          version="1.1"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          {createElements(
+            ItemTypes.ROPE,
+            items,
+            itemPermissions,
+            onItemDrag,
+            onItemSelect
+          )}
+        </svg>
+        {createElements(
+          ItemTypes.PIN,
+          items,
+          itemPermissions,
+          onItemDrag,
+          onItemSelect
+        )}
+      </div>
+    );
+  }
+);
 
 export default Board;

@@ -2,12 +2,24 @@ import { ActionTypes } from "../constants/ActionTypes";
 import { ItemTypes } from "../constants/ItemTypes";
 import { ToolTypes } from "../constants/ToolTypes";
 
-export const addPhotos = (urls, x = 300, y = 300) => ({
+export const addPhotos = (urls, x, y) => ({
   type: ActionTypes.ADD_PHOTOS,
   urls,
   x,
   y,
 });
+
+export const addPhotosFromFiles = (files) => (dispatch, getState) => {
+  if (files.length !== 0) {
+    const urls = [];
+    for (let i = 0; i < files.length; i++) {
+      if (files[i].type.startsWith("image/")) {
+        urls.push(window.URL.createObjectURL(files[i]));
+      }
+    }
+    return dispatch(addPhotos(urls, 300, 300));
+  }
+};
 
 export const addPin = (x, y) => ({
   type: ActionTypes.ADD_PIN,

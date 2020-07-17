@@ -36,20 +36,21 @@ const DraggableItemBox = ({
     }
   };
 
-  let cursor;
-  if (canSelect) cursor = "pointer";
-  else if (canDrag) cursor = "move";
-  else cursor = "auto";
+  let modifier;
+  if (isDragging) modifier = "draggable-item-box_dragging";
+  else {
+    if (canSelect) modifier = "draggable-item-box_selectable";
+    else if (canDrag) modifier = "draggable-item-box_active";
+    else modifier = "draggable-item-box_disabled";
+  }
 
   return (
     <div
-      className="draggable-item-box"
+      className={"draggable-item-box " + modifier}
       onClick={handleClick}
       style={{
         left: x,
         top: y,
-        opacity: isDragging ? 0.5 : 1,
-        cursor: cursor,
       }}
       ref={drag}
     >

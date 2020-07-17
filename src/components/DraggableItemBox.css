@@ -1,3 +1,19 @@
 .draggable-item-box {
   position: absolute;
 }
+
+.draggable-item-box_active {
+  cursor: move;
+}
+
+.draggable-item-box_selectable {
+  cursor: pointer;
+}
+
+.draggable-item-box_disabled {
+  pointer-events: none;
+}
+
+.draggable-item-box_dragging {
+  opacity: 0.5;
+}

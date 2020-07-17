@@ -3,10 +3,20 @@ import React from "react";
 import PropTypes from "prop-types";
 import "./DraggableItemBox.css";
 
-const DraggableItemBox = (props) => {
+const DraggableItemBox = ({
+  id,
+  x,
+  y,
+  itemType,
+  children,
+  canDrag,
+  canSelect,
+  onDrag,
+  onSelect,
+}) => {
   const [{ isDragging }, drag] = useDrag({
-    item: { type: props.itemType, id: props.id },
-    canDrag: !!props.canDrag,
+    item: { type: itemType, id },
+    canDrag: !!canDrag,
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),
     }),
@@ -14,26 +24,21 @@ const DraggableItemBox = (props) => {
       const result = monitor.getDropResult();
       if (result) {
         const delta = result.delta;
-        props.onDrag(
-          props.id,
-          props.itemType,
-          props.x + delta.x,
-          props.y + delta.y
-        );
+        onDrag(id, itemType, x + delta.x, y + delta.y);
       }
     },
   });
 
   const handleClick = (e) => {
-    if (props.canSelect && props.onSelect) {
-      props.onSelect(props.id, props.itemType);
+    if (canSelect && onSelect) {
+      onSelect(id, itemType);
       e.stopPropagation();
     }
   };
 
   let cursor;
-  if (props.canSelect) cursor = "pointer";
-  else if (props.canDrag) cursor = "move";
+  if (canSelect) cursor = "pointer";
+  else if (canDrag) cursor = "move";
   else cursor = "auto";
 
   return (
@@ -41,14 +46,14 @@ const DraggableItemBox = (props) => {
       className="draggable-item-box"
       onClick={handleClick}
       style={{
-        left: props.x,
-        top: props.y,
+        left: x,
+        top: y,
         opacity: isDragging ? 0.5 : 1,
         cursor: cursor,
       }}
       ref={drag}
     >
-      {props.children}
+      {children}
     </div>
   );
 };

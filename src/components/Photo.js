@@ -13,17 +13,12 @@ function Photo(props) {
   );
 }
 
+const { itemType, children, ...others } = DraggableItemBox.propTypes;
+
 Photo.propTypes = {
   url: PropTypes.string.isRequired,
-  isSelected: PropTypes.bool.isRequired,
-
-  id: PropTypes.number.isRequired,
-  x: PropTypes.number.isRequired,
-  y: PropTypes.number.isRequired,
-  canDrag: PropTypes.bool,
-  canSelect: PropTypes.bool,
-  onDrag: PropTypes.func,
-  onSelect: PropTypes.func,
+  isSelected: PropTypes.bool,
+  ...others,
 };
 
 Photo.defaultProps = {

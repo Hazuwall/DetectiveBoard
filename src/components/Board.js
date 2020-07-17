@@ -42,6 +42,7 @@ const createElements = (itemType, items, itemPermissions, onDrag, onSelect) => {
         Rope,
         {
           ...props,
+          key: props.id,
           node1: getNodePos(props.node1, items.nodes),
           node2: getNodePos(props.node2, items.nodes),
           canSelect,
@@ -57,7 +58,14 @@ const createElements = (itemType, items, itemPermissions, onDrag, onSelect) => {
     return items[itemType].map((props) =>
       React.createElement(
         componentType,
-        { ...props, canSelect, canDrag, onSelect, onDrag },
+        {
+          ...props,
+          key: props.id + itemType,
+          canSelect,
+          canDrag,
+          onSelect,
+          onDrag,
+        },
         null
       )
     );

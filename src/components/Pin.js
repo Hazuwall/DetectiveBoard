@@ -21,16 +21,11 @@ function Pin(props) {
   );
 }
 
+const { itemType, children, ...others } = DraggableItemBox.propTypes;
+
 Pin.propTypes = {
   isSelected: PropTypes.bool,
-
-  id: PropTypes.number.isRequired,
-  x: PropTypes.number.isRequired,
-  y: PropTypes.number.isRequired,
-  canDrag: PropTypes.bool,
-  canSelect: PropTypes.bool,
-  onDrag: PropTypes.func,
-  onSelect: PropTypes.func,
+  ...others,
 };
 
 Pin.defaultProps = {

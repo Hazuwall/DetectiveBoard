@@ -1,20 +1,19 @@
 import { ActionTypes } from "../constants/ActionTypes";
 import { ItemTypes } from "../constants/ItemTypes";
 
+const emptyState = {
+  selectedItem: null,
+  [ItemTypes.PIN]: [],
+  nodes: [],
+  [ItemTypes.ROPE]: [],
+  [ItemTypes.PHOTO]: [],
+};
+
 function setSelection(items, id, isSelected) {
   return items.map((item) => (item.id === id ? { ...item, isSelected } : item));
 }
 
-export default function items(
-  state = {
-    selectedItem: null,
-    [ItemTypes.PIN]: [],
-    nodes: [],
-    [ItemTypes.ROPE]: [],
-    [ItemTypes.PHOTO]: [],
-  },
-  action
-) {
+export default function items(state = emptyState, action) {
   switch (action.type) {
     case ActionTypes.ADD_PHOTOS: {
       const images = state[ItemTypes.PHOTO];
@@ -74,6 +73,9 @@ export default function items(
           },
         ],
       };
+
+    case ActionTypes.CLEAR_BOARD:
+      return emptyState;
 
     case ActionTypes.MOVE_ITEM:
       return {

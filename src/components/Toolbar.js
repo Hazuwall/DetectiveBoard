@@ -3,6 +3,7 @@ import "./Toolbar.css";
 import EffectTool from "./EffectTool";
 import { ToolTypes } from "../constants/ToolTypes";
 import PhotoPickerTool from "./PhotoPickerTool";
+import ClearBoardTool from "./ClearBoardTool";
 
 const Toolbar = () => {
   return (
@@ -12,6 +13,7 @@ const Toolbar = () => {
       <EffectTool text="TieRope" toolType={ToolTypes.TIE_ROPE_TOOL} />
       <PhotoPickerTool text="PickPhotos" />
       <EffectTool text="Remove" toolType={ToolTypes.REMOVE_TOOL} />
+      <ClearBoardTool text="ClearAll" />
     </div>
   );
 };

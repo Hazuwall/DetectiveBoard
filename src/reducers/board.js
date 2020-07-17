@@ -29,7 +29,7 @@ export default function board(
   action
 ) {
   switch (action.type) {
-    case ActionTypes.ADD_IMAGES:
+    case ActionTypes.ADD_PHOTOS:
       return {
         ...state,
         toolType: ToolTypes.MOVE_TOOL,

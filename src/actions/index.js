@@ -28,6 +28,10 @@ export const addRope = (node1, node2) => ({
   node2,
 });
 
+export const clearBoard = () => ({
+  type: ActionTypes.CLEAR_BOARD,
+});
+
 export const toggleTool = (toolType) => ({
   type: ActionTypes.TOGGLE_TOOL,
   toolType,

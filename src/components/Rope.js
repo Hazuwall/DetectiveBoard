@@ -1,25 +1,29 @@
 import React from "react";
 import PropTypes from "prop-types";
 import "./Rope.css";
+import { ItemTypes } from "../constants/ItemTypes";
 
 const Rope = ({ id, knot1, knot2, isSelected, canSelect, onSelect }) => {
   const handleClick = (e) => {
     if (canSelect && onSelect) {
-      onSelect(id);
+      onSelect(id, ItemTypes.ROPE);
       e.stopPropagation();
     }
   };
 
+  let modifier;
+  if (isSelected) modifier = "rope_selected";
+  else if (canSelect) modifier = "rope_selectable";
+  else modifier = "";
+
   return (
     <line
-      className="rope"
+      className={"rope " + modifier}
       onClick={handleClick}
       x1={knot1.x}
       y1={knot1.y}
       x2={knot2.x}
       y2={knot2.y}
-      stroke={isSelected ? "yellow" : "red"}
-      cursor={canSelect ? "pointer" : "auto"}
     />
   );
 };

@@ -1,8 +1,10 @@
 .board {
   position: relative;
-  width: 800px;
+  background-image: url(../assets/corkboard.jpg);
+  background-size: 600px;
+  width: 1000px;
   height: 800px;
-  background-color: coral;
+  box-shadow: inset 2px 0px 7px rgb(82, 82, 82);
 }
 
 .svg-container {

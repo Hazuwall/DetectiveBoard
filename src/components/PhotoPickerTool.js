@@ -15,7 +15,7 @@ const mapDispatchToProps = (dispatch) => {
 const ImagePickerTool = connect(
   null,
   mapDispatchToProps
-)(({ onUpload, text }) => {
+)(({ onUpload, ...others }) => {
   const filePickerEl = useRef(null);
 
   const handleClick = (e) => {
@@ -35,7 +35,7 @@ const ImagePickerTool = connect(
         multiple
         onChange={handleUpload}
       />
-      <Tool text={text} onClick={handleClick} />
+      <Tool {...others} onClick={handleClick} />
     </>
   );
 });

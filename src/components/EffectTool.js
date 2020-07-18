@@ -19,10 +19,10 @@ const mapDispatchToProps = (dispatch) => {
 const EffectTool = connect(
   mapStateToProps,
   mapDispatchToProps
-)(({ onToggle, currentToolType, toolType, text }) => {
+)(({ onToggle, currentToolType, toolType, ...others }) => {
   return (
     <Tool
-      text={text}
+      {...others}
       onClick={() => onToggle(toolType)}
       isActive={toolType === currentToolType}
     />

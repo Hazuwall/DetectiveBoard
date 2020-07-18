@@ -1,0 +1,8 @@
+.pin-container {
+  transform: translate(-20px, -20px);
+}
+
+.pin {
+  width: 40px;
+  height: 40px;
+}

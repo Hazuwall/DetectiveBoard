@@ -1,16 +1,19 @@
 import { useDrag, DragPreviewImage } from "react-dnd";
 import React from "react";
 import PropTypes from "prop-types";
-import "./DraggableItemBox.css";
+import "./BoardItemBox.css";
 
-const DraggableItemBox = ({
+const BoardItemBox = ({
   id,
   x,
   y,
   itemType,
   children,
+  className,
+  dragPreviewSrc,
   canDrag,
   canSelect,
+  isSelected,
   onDrag,
   onSelect,
 }) => {
@@ -40,23 +43,25 @@ const DraggableItemBox = ({
   };
 
   const handleDrag = (e) => {
-    const targetX = x + e.nativeEvent.offsetX - relativeCursorOffset.x;
-    const targetY = y + e.nativeEvent.offsetY - relativeCursorOffset.y;
-    if (targetX > 0 && targetY > 0) onDrag(id, itemType, targetX, targetY);
-    else onDrag(id, itemType, x, y);
+    //TODO: disable dragging while canDrag=false
+    if (!!canDrag) {
+      const targetX = x + e.nativeEvent.offsetX - relativeCursorOffset.x;
+      const targetY = y + e.nativeEvent.offsetY - relativeCursorOffset.y;
+      if (targetX > 0 && targetY > 0) onDrag(id, itemType, targetX, targetY);
+      else onDrag(id, itemType, x, y);
+    }
   };
 
   let modifier;
-  if (isDragging) modifier = "draggable-item-box_dragging";
-  else {
-    if (canSelect) modifier = "draggable-item-box_selectable";
-    else if (canDrag) modifier = "draggable-item-box_active";
-    else modifier = "draggable-item-box_disabled";
-  }
+  if (isDragging) modifier = "board-item-box_dragging";
+  else if (isSelected) modifier = "board-item-box_selected";
+  else if (canSelect) modifier = "board-item-box_selectable";
+  else if (canDrag) modifier = "board-item-box_draggable";
+  else modifier = "board-item-box_disabled";
 
   return (
     <div
-      className={"draggable-item-box " + modifier}
+      className={["board-item-box", modifier, className].join(" ")}
       onClick={handleClick}
       style={{
         left: x,
@@ -65,29 +70,34 @@ const DraggableItemBox = ({
       ref={drag}
       onDrag={handleDrag}
     >
-      <DragPreviewImage connect={preview} src="" />
+      <DragPreviewImage connect={preview} src={dragPreviewSrc} />
       {children}
     </div>
   );
 };
 
-DraggableItemBox.propTypes = {
+BoardItemBox.propTypes = {
   id: PropTypes.number.isRequired,
   x: PropTypes.number.isRequired,
   y: PropTypes.number.isRequired,
   itemType: PropTypes.string.isRequired,
   children: PropTypes.node.isRequired,
+  className: PropTypes.string,
+  dragPreviewSrc: PropTypes.string,
   canDrag: PropTypes.bool,
   canSelect: PropTypes.bool,
+  isSelected: PropTypes.bool,
   onDrag: PropTypes.func,
   onSelect: PropTypes.func,
 };
 
-DraggableItemBox.defaultProps = {
+BoardItemBox.defaultProps = {
+  className: "",
   canDrag: true,
   canSelect: false,
+  isSelected: false,
   onSelect: null,
   onDrag: null,
 };
 
-export default DraggableItemBox;
+export default BoardItemBox;

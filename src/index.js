@@ -11,6 +11,7 @@ import "./index.css";
 import App from "./components/App";
 import * as serviceWorker from "./serviceWorker";
 
+//TODO: disable logger in production
 const store = createStore(reducer, applyMiddleware(thunk, logger));
 
 ReactDOM.render(

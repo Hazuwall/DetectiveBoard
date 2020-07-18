@@ -61,25 +61,33 @@ export default function items(state = emptyState, action) {
 
     case ActionTypes.ADD_ROPE:
       const ropes = state[ItemTypes.ROPE];
-      return {
-        ...state,
-        [ItemTypes.ROPE]: [
-          ...ropes,
-          {
-            id: ropes.reduce((maxId, item) => Math.max(item.id, maxId), 0) + 1,
-            knot1: action.knot1,
-            knot2: action.knot2,
-            isSelected: false,
-          },
-        ],
-      };
+      if (
+        state.knots.some((t) => t.id === action.knot1) &&
+        state.knots.some((t) => t.id === action.knot2)
+      )
+        return {
+          ...state,
+          [ItemTypes.ROPE]: [
+            ...ropes,
+            {
+              id:
+                ropes.reduce((maxId, item) => Math.max(item.id, maxId), 0) + 1,
+              knot1: action.knot1,
+              knot2: action.knot2,
+              isSelected: false,
+            },
+          ],
+        };
+      else return state;
 
     case ActionTypes.CLEAR_BOARD:
       return emptyState;
 
     case ActionTypes.MOVE_ITEM:
       if (action.itemType === ItemTypes.PIN) {
-        let { x, y } = state[action.itemType].find((t) => t.id === action.id);
+        const item = state[action.itemType].find((t) => t.id === action.id);
+        if (!item) return state;
+        let { x, y } = item;
         x += action.dx;
         y += action.dy;
         return {

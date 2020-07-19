@@ -1,11 +1,11 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "6d9c542aa3a69c8089645e2752b190ac",
+    "revision": "dbc947ef589286418a029dc37873db1c",
     "url": "/DetectiveBoard/index.html"
   },
   {
-    "revision": "0f1972738924c272deba",
-    "url": "/DetectiveBoard/static/css/main.ee6b1dc2.chunk.css"
+    "revision": "99769e61cfd24ce0e0b3",
+    "url": "/DetectiveBoard/static/css/main.6bf433ad.chunk.css"
   },
   {
     "revision": "b1cf91b135c327e122bb",
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/DetectiveBoard/static/js/2.7d1edaad.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "0f1972738924c272deba",
-    "url": "/DetectiveBoard/static/js/main.c0a2da7f.chunk.js"
+    "revision": "99769e61cfd24ce0e0b3",
+    "url": "/DetectiveBoard/static/js/main.03e9217f.chunk.js"
   },
   {
     "revision": "f40c74853fe9344b99e4",

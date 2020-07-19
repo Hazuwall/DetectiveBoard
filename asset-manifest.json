@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/DetectiveBoard/static/css/main.ee6b1dc2.chunk.css",
-    "main.js": "/DetectiveBoard/static/js/main.c0a2da7f.chunk.js",
-    "main.js.map": "/DetectiveBoard/static/js/main.c0a2da7f.chunk.js.map",
+    "main.css": "/DetectiveBoard/static/css/main.6bf433ad.chunk.css",
+    "main.js": "/DetectiveBoard/static/js/main.03e9217f.chunk.js",
+    "main.js.map": "/DetectiveBoard/static/js/main.03e9217f.chunk.js.map",
     "runtime-main.js": "/DetectiveBoard/static/js/runtime-main.b974a58f.js",
     "runtime-main.js.map": "/DetectiveBoard/static/js/runtime-main.b974a58f.js.map",
     "static/js/2.7d1edaad.chunk.js": "/DetectiveBoard/static/js/2.7d1edaad.chunk.js",
     "static/js/2.7d1edaad.chunk.js.map": "/DetectiveBoard/static/js/2.7d1edaad.chunk.js.map",
     "index.html": "/DetectiveBoard/index.html",
-    "precache-manifest.c254ca57825ddae4e3d97bacd0c66de7.js": "/DetectiveBoard/precache-manifest.c254ca57825ddae4e3d97bacd0c66de7.js",
+    "precache-manifest.e6de4def330b3321d736c1e40f33558c.js": "/DetectiveBoard/precache-manifest.e6de4def330b3321d736c1e40f33558c.js",
     "service-worker.js": "/DetectiveBoard/service-worker.js",
-    "static/css/main.ee6b1dc2.chunk.css.map": "/DetectiveBoard/static/css/main.ee6b1dc2.chunk.css.map",
+    "static/css/main.6bf433ad.chunk.css.map": "/DetectiveBoard/static/css/main.6bf433ad.chunk.css.map",
     "static/js/2.7d1edaad.chunk.js.LICENSE.txt": "/DetectiveBoard/static/js/2.7d1edaad.chunk.js.LICENSE.txt",
     "static/media/Board.css": "/DetectiveBoard/static/media/corkboard.6650586c.jpg",
     "static/media/pin.png": "/DetectiveBoard/static/media/pin.a142205c.png"
@@ -18,7 +18,7 @@
   "entrypoints": [
     "static/js/runtime-main.b974a58f.js",
     "static/js/2.7d1edaad.chunk.js",
-    "static/css/main.ee6b1dc2.chunk.css",
-    "static/js/main.c0a2da7f.chunk.js"
+    "static/css/main.6bf433ad.chunk.css",
+    "static/js/main.03e9217f.chunk.js"
   ]
 }

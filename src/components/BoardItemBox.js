@@ -43,7 +43,6 @@ const BoardItemBox = ({
   };
 
   const handleDrag = (e) => {
-    //TODO: disable dragging while canDrag=false
     if (!!canDrag) {
       const targetX = x + e.nativeEvent.offsetX - relativeCursorOffset.x;
       const targetY = y + e.nativeEvent.offsetY - relativeCursorOffset.y;

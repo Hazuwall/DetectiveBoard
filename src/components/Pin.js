@@ -7,7 +7,7 @@ import "./Pin.css";
 function Pin(props) {
   return (
     <BoardItemBox {...props} className="pin-container" itemType={ItemTypes.PIN}>
-      <img className="pin" src={pinImage} alt="" />
+      <img draggable="false" className="pin" src={pinImage} alt="" />
     </BoardItemBox>
   );
 }

@@ -8,7 +8,7 @@ function Photo(props) {
   const { url, ...others } = props;
   return (
     <BoardItemBox {...others} itemType={ItemTypes.PHOTO}>
-      <img className="photo" alt="" src={url} />
+      <img draggable="false" className="photo" alt="" src={url} />
     </BoardItemBox>
   );
 }

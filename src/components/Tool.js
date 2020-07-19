@@ -9,7 +9,7 @@ const Tool = ({ onClick, isActive, icon, text }) => {
       className={isActive ? "tool tool_active" : "tool"}
       onClick={onClick}
     >
-      <img className="tool-icon" src={icon} alt="" />
+      <img draggable="false" className="tool-icon" src={icon} alt="" />
     </div>
   );
 };

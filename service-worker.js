@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/DetectiveBoard/precache-manifest.ccee67e3d665d8c8d647d7c5bb6ff05c.js"
+  "/DetectiveBoard/precache-manifest.c254ca57825ddae4e3d97bacd0c66de7.js"
 );
 
 self.addEventListener('message', (event) => {

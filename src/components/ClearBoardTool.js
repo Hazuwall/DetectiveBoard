@@ -1,19 +1,13 @@
-import React from "react";
 import { connect } from "react-redux";
-import PropTypes from "prop-types";
-import { clearBoard } from "../actions";
+import { clearBoardWithConfirmAndDisposal } from "../actions";
 import Tool from "./Tool";
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onClick: () => dispatch(clearBoard()),
+    onClick: () => dispatch(clearBoardWithConfirmAndDisposal()),
   };
 };
 
 const ClearBoardTool = connect(null, mapDispatchToProps)(Tool);
-
-ClearBoardTool.propTypes = {
-  text: PropTypes.string.isRequired,
-};
 
 export default ClearBoardTool;

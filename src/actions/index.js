@@ -44,6 +44,17 @@ export const clearBoard = () => ({
   type: ActionTypes.CLEAR_BOARD,
 });
 
+export const clearBoardWithConfirmAndDisposal = () => (dispatch, getState) => {
+  if (window.confirm("Do you want to clear the board?")) {
+    const urls = getState().items[ItemTypes.PHOTO].map((t) => t.url);
+    const result = dispatch(clearBoard());
+    urls.forEach((url) => {
+      if (url.startsWith("blob")) URL.revokeObjectURL(url);
+    });
+    return result;
+  }
+};
+
 export const toggleTool = (toolType) => ({
   type: ActionTypes.TOGGLE_TOOL,
   toolType,

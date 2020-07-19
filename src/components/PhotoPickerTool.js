@@ -1,6 +1,5 @@
 import React, { useRef } from "react";
 import { connect } from "react-redux";
-import PropTypes from "prop-types";
 import { uploadFiles } from "../actions";
 import Tool from "./Tool";
 
@@ -39,9 +38,5 @@ const ImagePickerTool = connect(
     </>
   );
 });
-
-ImagePickerTool.propTypes = {
-  text: PropTypes.string.isRequired,
-};
 
 export default ImagePickerTool;

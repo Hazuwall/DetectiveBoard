@@ -31,7 +31,9 @@ const Toolbar = () => {
         text="Remove"
         toolType={ToolTypes.REMOVE_TOOL}
       />
-      <ClearBoardTool icon={clearIcon} text="Clear Board" />
+      <div className="toolbar-danger-container">
+        <ClearBoardTool icon={clearIcon} text="Clear Board" />
+      </div>
     </div>
   );
 };

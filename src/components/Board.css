@@ -1,5 +1,5 @@
 .board {
-  position: relative;
+  position: relative; /* participates in items' absolute positioning */
   background-image: url(../assets/corkboard.jpg);
   background-size: 600px;
   width: 1000px;
@@ -8,7 +8,7 @@
 }
 
 .svg-container {
-  position: relative;
+  position: relative; /* supports displaying svg over absolutely positioned items */
   pointer-events: none;
   width: 100%;
   height: 100%;

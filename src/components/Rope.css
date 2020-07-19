@@ -1,4 +1,18 @@
 .rope {
+  stroke: red;
   stroke-width: 5;
-  transform: translate(12.5px, 12.5px);
+  pointer-events: stroke;
+}
+
+.rope_selectable {
+  cursor: pointer;
+}
+
+.rope_selectable:hover {
+  stroke: rgb(255, 83, 83);
+}
+
+.rope_selected {
+  cursor: pointer;
+  stroke: yellow;
 }

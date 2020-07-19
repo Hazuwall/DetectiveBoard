@@ -1,77 +1,148 @@
 import React from "react";
 import { useDrop } from "react-dnd";
 import { connect } from "react-redux";
-import "./Board.css";
 import { ItemTypes } from "../constants/ItemTypes";
+import {
+  uploadFiles,
+  moveItem,
+  updateKnot,
+  selectItemWithTool,
+  clickSpaceWithTool,
+} from "../actions";
+import "./Board.css";
 import Pin from "./Pin";
-import { moveItem, clickSpaceWithTool } from "../actions";
 import Rope from "./Rope";
+import Photo from "./Photo";
+import { NativeTypes } from "react-dnd-html5-backend";
 
 const mapStateToProps = (state) => {
-  return { items: state.items };
+  return { items: state.items, itemPermissions: state.board.itemPermissions };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onClick: (e) => {
-      dispatch(
-        clickSpaceWithTool(e.nativeEvent.offsetX, e.nativeEvent.offsetY)
-      );
+    onClick: (x, y) => {
+      dispatch(clickSpaceWithTool(x, y));
+    },
+    onUpload: (files) => {
+      dispatch(uploadFiles(files));
+    },
+    onItemDrag: (id, itemType, x, y) => {
+      if (itemType === ItemTypes.PIN) dispatch(updateKnot(id, x, y));
+    },
+    onItemDragAndDrop: (id, itemType, dx, dy) => {
+      dispatch(moveItem(id, itemType, dx, dy));
+    },
+    onItemSelect: (id, itemType) => {
+      dispatch(selectItemWithTool(id, itemType));
     },
   };
 };
 
-const getNodePos = (id, nodes) => {
-  const node = nodes.find((t) => t.id === id);
-  return { x: node.x, y: node.y };
+const getKnotPos = (id, knots) => {
+  const knot = knots.find((t) => t.id === id);
+  return { x: knot.x, y: knot.y };
+};
+
+const createElements = (itemType, items, itemPermissions, onDrag, onSelect) => {
+  if (itemType === ItemTypes.ROPE) {
+    const canSelect = itemPermissions.canSelect.includes(itemType);
+    return items[itemType].map((props) =>
+      React.createElement(
+        Rope,
+        {
+          ...props,
+          key: props.id,
+          knot1: getKnotPos(props.knot1, items.knots),
+          knot2: getKnotPos(props.knot2, items.knots),
+          canSelect,
+          onSelect,
+        },
+        null
+      )
+    );
+  } else {
+    const canSelect = itemPermissions.canSelect.includes(itemType);
+    const canDrag = itemPermissions.canDrag.includes(itemType);
+    const componentType = itemType === ItemTypes.PIN ? Pin : Photo;
+    return items[itemType].map((props) =>
+      React.createElement(
+        componentType,
+        {
+          ...props,
+          key: props.id + itemType,
+          canSelect,
+          canDrag,
+          onSelect,
+          onDrag,
+        },
+        null
+      )
+    );
+  }
 };
 
 const Board = connect(
   mapStateToProps,
   mapDispatchToProps
-)(({ onDrop, onClick, items }) => {
-  const [, drop] = useDrop({
-    accept: ItemTypes.PIN,
-    drop: (item, monitor) => {
-      const { id, type } = monitor.getItem();
-      const delta = monitor.getDifferenceFromInitialOffset();
-      return { delta };
-    },
-  });
+)(
+  ({
+    items,
+    itemPermissions,
+    onUpload,
+    onClick,
+    onItemDrag,
+    onItemDragAndDrop,
+    onItemSelect,
+  }) => {
+    const [, drop] = useDrop({
+      accept: [ItemTypes.PIN, ItemTypes.PHOTO, NativeTypes.FILE],
+      drop: (item, monitor) => {
+        if (!item.type || item.type === NativeTypes.FILE) {
+          onUpload(item.files);
+        } else {
+          const delta = monitor.getDifferenceFromInitialOffset();
+          onItemDragAndDrop(item.id, item.type, delta.x, delta.y);
+        }
+      },
+    });
 
-  return (
-    <div onClick={onClick} ref={drop} className="board">
-      <svg
-        className="svg-container"
-        viewBox="0 0 800 800"
-        version="1.1"
-        xmlns="http://www.w3.org/2000/svg"
+    return (
+      <div
+        onClick={(e) => onClick(e.nativeEvent.offsetX, e.nativeEvent.offsetY)}
+        ref={drop}
+        className="board"
       >
-        {items[ItemTypes.ROPE].map((item) => {
-          return (
-            <Rope
-              key={item.id}
-              id={item.id}
-              node1={getNodePos(item.node1, items.nodes)}
-              node2={getNodePos(item.node2, items.nodes)}
-              isSelected={item.isSelected}
-            />
-          );
-        })}
-      </svg>
-      {items[ItemTypes.PIN].map((item) => {
-        return (
-          <Pin
-            key={item.id}
-            id={item.id}
-            x={item.x}
-            y={item.y}
-            isSelected={item.isSelected}
-          />
-        );
-      })}
-    </div>
-  );
-});
+        {createElements(
+          ItemTypes.PHOTO,
+          items,
+          itemPermissions,
+          onItemDrag,
+          onItemSelect
+        )}
+        <svg
+          className="svg-container"
+          version="1.1"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          {createElements(
+            ItemTypes.ROPE,
+            items,
+            itemPermissions,
+            onItemDrag,
+            onItemSelect
+          )}
+        </svg>
+        {createElements(
+          ItemTypes.PIN,
+          items,
+          itemPermissions,
+          onItemDrag,
+          onItemSelect
+        )}
+      </div>
+    );
+  }
+);
 
 export default Board;

@@ -1,53 +1,46 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { connect } from "react-redux";
-import { ItemTypes } from "../constants/ItemTypes";
-import { selectItemWithTool } from "../actions";
-import { ToolTypes } from "../constants/ToolTypes";
 import "./Rope.css";
+import { ItemTypes } from "../constants/ItemTypes";
 
-const mapStateToProps = (state) => {
-  return {
-    canSelect: state.board.toolType === ToolTypes.REMOVE_TOOL,
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    onSelect: (id) => {
-      dispatch(selectItemWithTool(id, ItemTypes.ROPE));
-    },
-  };
-};
-
-const Rope = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(({ id, node1, node2, isSelected, canSelect, onSelect }) => {
+const Rope = ({ id, knot1, knot2, isSelected, canSelect, onSelect }) => {
   const handleClick = (e) => {
-    onSelect(id);
-    e.stopPropagation();
+    if (canSelect && onSelect) {
+      onSelect(id, ItemTypes.ROPE);
+      e.stopPropagation();
+    }
   };
+
+  let modifier;
+  if (isSelected) modifier = "rope_selected";
+  else if (canSelect) modifier = "rope_selectable";
+  else modifier = "";
 
   return (
     <line
-      className="rope"
+      className={"rope " + modifier}
       onClick={handleClick}
-      x1={node1.x}
-      y1={node1.y}
-      x2={node2.x}
-      y2={node2.y}
-      stroke={isSelected ? "yellow" : "red"}
-      cursor={canSelect ? "pointer" : "auto"}
+      x1={knot1.x}
+      y1={knot1.y}
+      x2={knot2.x}
+      y2={knot2.y}
     />
   );
-});
+};
 
 Rope.propTypes = {
   id: PropTypes.number.isRequired,
-  node1: PropTypes.object.isRequired,
-  node2: PropTypes.object.isRequired,
-  isSelected: PropTypes.bool.isRequired,
+  knot1: PropTypes.object.isRequired,
+  knot2: PropTypes.object.isRequired,
+  isSelected: PropTypes.bool,
+  canSelect: PropTypes.bool,
+  onSelect: PropTypes.func,
+};
+
+Rope.defaultProps = {
+  isSelected: false,
+  canSelect: false,
+  onSelect: null,
 };
 
 export default Rope;

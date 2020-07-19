@@ -4,7 +4,3 @@ export const ToolTypes = {
   REMOVE_TOOL: "REMOVE_TOOL",
   TIE_ROPE_TOOL: "TIE_ROPE_TOOL",
 };
-
-export const isSelectTool = (tool) => {
-  return tool === ToolTypes.REMOVE_TOOL || tool === ToolTypes.TIE_ROPE_TOOL;
-};

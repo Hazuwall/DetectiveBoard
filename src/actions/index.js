@@ -2,6 +2,25 @@ import { ActionTypes } from "../constants/ActionTypes";
 import { ItemTypes } from "../constants/ItemTypes";
 import { ToolTypes } from "../constants/ToolTypes";
 
+export const addPhotos = (urls, x, y) => ({
+  type: ActionTypes.ADD_PHOTOS,
+  urls,
+  x,
+  y,
+});
+
+export const uploadFiles = (files) => (dispatch, getState) => {
+  if (files.length !== 0) {
+    const urls = [];
+    for (let i = 0; i < files.length; i++) {
+      if (files[i].type.startsWith("image/")) {
+        urls.push(window.URL.createObjectURL(files[i]));
+      }
+    }
+    return dispatch(addPhotos(urls, 300, 300));
+  }
+};
+
 export const addPin = (x, y) => ({
   type: ActionTypes.ADD_PIN,
   x,
@@ -15,30 +34,38 @@ export const clickSpaceWithTool = (x, y) => (dispatch, getState) => {
   else if (boardState.selectedItem !== null) return dispatch(unselectItem());
 };
 
-export const addRope = (node1, node2) => ({
+export const addRope = (knot1, knot2) => ({
   type: ActionTypes.ADD_ROPE,
-  node1,
-  node2,
+  knot1,
+  knot2,
 });
+
+export const clearBoard = () => ({
+  type: ActionTypes.CLEAR_BOARD,
+});
+
+export const clearBoardWithConfirmAndDisposal = () => (dispatch, getState) => {
+  if (window.confirm("Do you want to clear the board?")) {
+    const urls = getState().items[ItemTypes.PHOTO].map((t) => t.url);
+    const result = dispatch(clearBoard());
+    urls.forEach((url) => {
+      if (url.startsWith("blob")) URL.revokeObjectURL(url);
+    });
+    return result;
+  }
+};
 
 export const toggleTool = (toolType) => ({
   type: ActionTypes.TOGGLE_TOOL,
   toolType,
 });
 
-export const moveItem = (id, itemType, x, y) => ({
+export const moveItem = (id, itemType, dx, dy) => ({
   type: ActionTypes.MOVE_ITEM,
   id,
   itemType,
-  x,
-  y,
-});
-
-export const moveNode = (id, x, y) => ({
-  type: ActionTypes.MOVE_NODE,
-  id,
-  x,
-  y,
+  dx,
+  dy,
 });
 
 export const removeItem = (id, itemType) => ({
@@ -46,6 +73,18 @@ export const removeItem = (id, itemType) => ({
   id,
   itemType,
 });
+
+export const removeItemWithDisposal = (id, itemType) => (
+  dispatch,
+  getState
+) => {
+  if (itemType === ItemTypes.PHOTO) {
+    const img = getState().items[ItemTypes.PHOTO].find((t) => t.id === id);
+    const result = dispatch(removeItem(id, itemType));
+    if (img && img.url.startsWith("blob")) URL.revokeObjectURL(img.url);
+    return result;
+  } else dispatch(removeItem(id, itemType));
+};
 
 export const selectItem = (id, itemType) => ({
   type: ActionTypes.SELECT_ITEM,
@@ -66,7 +105,7 @@ export const selectItemWithTool = (id, itemType) => (dispatch, getState) => {
   const selectedItem = state.items.selectedItem;
   switch (state.board.toolType) {
     case ToolTypes.REMOVE_TOOL:
-      return dispatch(removeItem(id, itemType));
+      return dispatch(removeItemWithDisposal(id, itemType));
 
     case ToolTypes.TIE_ROPE_TOOL:
       if (itemType === ItemTypes.PIN) {
@@ -86,6 +125,13 @@ export const selectItemWithTool = (id, itemType) => (dispatch, getState) => {
       return;
   }
 };
+
+export const updateKnot = (id, x, y) => ({
+  type: ActionTypes.UPDATE_KNOT,
+  id,
+  x,
+  y,
+});
 
 export const unselectItem = (id, itemType) => ({
   type: ActionTypes.UNSELECT_ITEM,

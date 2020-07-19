@@ -1,42 +1,28 @@
 import React from "react";
-import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import "./Toolbar.css";
-import { toggleTool } from "../actions";
+import "./Tool.css";
 
-const mapStateToProps = (state) => {
-  return { currentToolType: state.board.toolType };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    onToggle: (type) => {
-      dispatch(toggleTool(type));
-    },
-  };
-};
-
-const Tool = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(({ onToggle, currentToolType, toolType, text }) => {
+const Tool = ({ onClick, isActive, icon, text }) => {
   return (
-    <div>
-      <button
-        style={{
-          backgroundColor: toolType === currentToolType ? "red" : "grey",
-        }}
-        onClick={() => onToggle(toolType)}
-      >
-        {text}
-      </button>
+    <div
+      title={text}
+      className={isActive ? "tool tool_active" : "tool"}
+      onClick={onClick}
+    >
+      <img className="tool-icon" src={icon} alt="" />
     </div>
   );
-});
+};
 
 Tool.propTypes = {
-  toolType: PropTypes.string.isRequired,
+  onClick: PropTypes.func.isRequired,
+  icon: PropTypes.string.isRequired,
   text: PropTypes.string.isRequired,
+  isActive: PropTypes.bool,
+};
+
+Tool.defaultProps = {
+  isActive: false,
 };
 
 export default Tool;

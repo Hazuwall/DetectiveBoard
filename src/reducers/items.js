@@ -1,23 +1,42 @@
 import { ActionTypes } from "../constants/ActionTypes";
 import { ItemTypes } from "../constants/ItemTypes";
 
+const emptyState = {
+  selectedItem: null,
+  [ItemTypes.PIN]: [],
+  knots: [],
+  [ItemTypes.ROPE]: [],
+  [ItemTypes.PHOTO]: [],
+};
+
 function setSelection(items, id, isSelected) {
   return items.map((item) => (item.id === id ? { ...item, isSelected } : item));
 }
 
-export default function items(
-  state = {
-    selectedItem: null,
-    [ItemTypes.PIN]: [],
-    nodes: [],
-    [ItemTypes.ROPE]: [],
-  },
-  action
-) {
+export default function items(state = emptyState, action) {
   switch (action.type) {
+    case ActionTypes.ADD_PHOTOS: {
+      const images = state[ItemTypes.PHOTO];
+      let id = images.reduce((maxId, item) => Math.max(item.id, maxId), 0) + 1;
+      let x = action.x;
+      let y = action.y;
+      const newImages = action.urls.map((url) => {
+        const image = { id, x, y, url, isSelected: false };
+        id++;
+        x += 20;
+        y += 20;
+        return image;
+      });
+
+      return {
+        ...state,
+        [ItemTypes.PHOTO]: images.concat(newImages),
+      };
+    }
+
     case ActionTypes.ADD_PIN:
       const pins = state[ItemTypes.PIN];
-      const nodes = state.nodes;
+      const knots = state.knots;
       const id = pins.reduce((maxId, item) => Math.max(item.id, maxId), 0) + 1;
       return {
         ...state,
@@ -30,8 +49,8 @@ export default function items(
             isSelected: false,
           },
         ],
-        nodes: [
-          ...nodes,
+        knots: [
+          ...knots,
           {
             id,
             x: action.x,
@@ -42,32 +61,51 @@ export default function items(
 
     case ActionTypes.ADD_ROPE:
       const ropes = state[ItemTypes.ROPE];
-      return {
-        ...state,
-        [ItemTypes.ROPE]: [
-          ...ropes,
-          {
-            id: ropes.reduce((maxId, item) => Math.max(item.id, maxId), 0) + 1,
-            node1: action.node1,
-            node2: action.node2,
-            isSelected: false,
-          },
-        ],
-      };
+      if (
+        state.knots.some((t) => t.id === action.knot1) &&
+        state.knots.some((t) => t.id === action.knot2)
+      )
+        return {
+          ...state,
+          [ItemTypes.ROPE]: [
+            ...ropes,
+            {
+              id:
+                ropes.reduce((maxId, item) => Math.max(item.id, maxId), 0) + 1,
+              knot1: action.knot1,
+              knot2: action.knot2,
+              isSelected: false,
+            },
+          ],
+        };
+      else return state;
+
+    case ActionTypes.CLEAR_BOARD:
+      return emptyState;
 
     case ActionTypes.MOVE_ITEM:
+      if (action.itemType === ItemTypes.PIN) {
+        const item = state[action.itemType].find((t) => t.id === action.id);
+        if (!item) return state;
+        let { x, y } = item;
+        x += action.dx;
+        y += action.dy;
+        return {
+          ...state,
+          [action.itemType]: state[action.itemType].map((t) =>
+            t.id === action.id ? { ...t, x, y } : t
+          ),
+          knots: state.knots.map((t) =>
+            t.id === action.id ? { ...t, x, y } : t
+          ),
+        };
+      }
       return {
         ...state,
-        [action.itemType]: state[action.itemType].map((item) =>
-          item.id === action.id ? { ...item, x: action.x, y: action.y } : item
-        ),
-      };
-
-    case ActionTypes.MOVE_NODE:
-      return {
-        ...state,
-        nodes: state.nodes.map((item) =>
-          item.id === action.id ? { ...item, x: action.x, y: action.y } : item
+        [action.itemType]: state[action.itemType].map((t) =>
+          t.id === action.id
+            ? { ...t, x: t.x + action.dx, y: t.y + action.dy }
+            : t
         ),
       };
 
@@ -78,9 +116,9 @@ export default function items(
           [action.itemType]: state[action.itemType].filter(
             (t) => t.id !== action.id
           ),
-          nodes: state.nodes.filter((t) => t.id !== action.id),
+          knots: state.knots.filter((t) => t.id !== action.id),
           [ItemTypes.ROPE]: state[ItemTypes.ROPE].filter(
-            (t) => t.node1 !== action.id && t.node2 !== action.id
+            (t) => t.knot1 !== action.id && t.knot2 !== action.id
           ),
         };
       } else {
@@ -133,6 +171,15 @@ export default function items(
           ),
         };
     }
+
+    // TODO: skip intermediate idempotent actions
+    case ActionTypes.UPDATE_KNOT:
+      return {
+        ...state,
+        knots: state.knots.map((item) =>
+          item.id === action.id ? { ...item, x: action.x, y: action.y } : item
+        ),
+      };
 
     case ActionTypes.UNSELECT_ITEM:
     case ActionTypes.TOGGLE_TOOL: {

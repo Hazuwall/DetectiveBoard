@@ -1,6 +1,12 @@
 .toolbar {
-  display: block;
-  width: 100px;
-  height: 800px;
-  background-color: rgb(160, 152, 152);
+  display: flex;
+  flex-flow: column;
+  background-color: rgb(174, 181, 184);
+}
+
+.toolbar-danger-container {
+  display: flex;
+  flex-grow: 1;
+  justify-content: flex-end;
+  flex-direction: column;
 }

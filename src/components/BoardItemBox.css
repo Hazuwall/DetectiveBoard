@@ -1,0 +1,32 @@
+.board-item-box {
+  position: absolute;
+}
+
+.board-item-box_draggable {
+  cursor: move;
+}
+
+.board-item-box_draggable:hover {
+  filter: brightness(80%);
+}
+
+.board-item-box_selectable {
+  cursor: pointer;
+}
+
+.board-item-box_selectable:hover {
+  filter: brightness(80%);
+}
+
+.board-item-box_disabled {
+  pointer-events: none;
+}
+
+.board-item-box_dragging {
+  opacity: 0.5;
+}
+
+.board-item-box_selected {
+  cursor: pointer;
+  filter: brightness(140%);
+}

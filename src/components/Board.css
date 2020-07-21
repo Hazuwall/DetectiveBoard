@@ -2,7 +2,7 @@
   position: relative; /* participates in items' absolute positioning */
   background-image: url(../assets/corkboard.jpg);
   background-size: 600px;
-  width: 1280px;
+  min-width: 1280px;
   height: 720px;
   box-shadow: inset 2px 0px 7px rgb(82, 82, 82);
 }

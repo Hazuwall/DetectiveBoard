@@ -11,8 +11,10 @@ import "./index.css";
 import App from "./components/App";
 import * as serviceWorker from "./serviceWorker";
 
-//TODO: disable logger in production
-const store = createStore(reducer, applyMiddleware(thunk, logger));
+const middlewares = [thunk];
+if (process.env.NODE_ENV !== "production") middlewares.push(logger);
+
+const store = createStore(reducer, applyMiddleware(...middlewares));
 
 ReactDOM.render(
   <React.StrictMode>

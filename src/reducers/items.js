@@ -1,5 +1,6 @@
 import { ActionTypes } from "../constants/ActionTypes";
 import { ItemTypes } from "../constants/ItemTypes";
+import example from "../data/example";
 
 const emptyState = {
   selectedItem: null,
@@ -13,7 +14,7 @@ function setSelection(items, id, isSelected) {
   return items.map((item) => (item.id === id ? { ...item, isSelected } : item));
 }
 
-export default function items(state = emptyState, action) {
+export default function items(state = example, action) {
   switch (action.type) {
     case ActionTypes.ADD_PHOTOS: {
       const images = state[ItemTypes.PHOTO];

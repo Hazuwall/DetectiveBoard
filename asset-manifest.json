@@ -1,24 +1,34 @@
 {
   "files": {
-    "main.css": "/DetectiveBoard/static/css/main.6bf433ad.chunk.css",
-    "main.js": "/DetectiveBoard/static/js/main.03e9217f.chunk.js",
-    "main.js.map": "/DetectiveBoard/static/js/main.03e9217f.chunk.js.map",
+    "main.css": "/DetectiveBoard/static/css/main.f1857780.chunk.css",
+    "main.js": "/DetectiveBoard/static/js/main.e214aeca.chunk.js",
+    "main.js.map": "/DetectiveBoard/static/js/main.e214aeca.chunk.js.map",
     "runtime-main.js": "/DetectiveBoard/static/js/runtime-main.b974a58f.js",
     "runtime-main.js.map": "/DetectiveBoard/static/js/runtime-main.b974a58f.js.map",
-    "static/js/2.7d1edaad.chunk.js": "/DetectiveBoard/static/js/2.7d1edaad.chunk.js",
-    "static/js/2.7d1edaad.chunk.js.map": "/DetectiveBoard/static/js/2.7d1edaad.chunk.js.map",
+    "static/js/2.f9519daa.chunk.js": "/DetectiveBoard/static/js/2.f9519daa.chunk.js",
+    "static/js/2.f9519daa.chunk.js.map": "/DetectiveBoard/static/js/2.f9519daa.chunk.js.map",
     "index.html": "/DetectiveBoard/index.html",
-    "precache-manifest.e6de4def330b3321d736c1e40f33558c.js": "/DetectiveBoard/precache-manifest.e6de4def330b3321d736c1e40f33558c.js",
+    "precache-manifest.17cbd7c0d6dbfa2ba980ad2086f288fe.js": "/DetectiveBoard/precache-manifest.17cbd7c0d6dbfa2ba980ad2086f288fe.js",
     "service-worker.js": "/DetectiveBoard/service-worker.js",
-    "static/css/main.6bf433ad.chunk.css.map": "/DetectiveBoard/static/css/main.6bf433ad.chunk.css.map",
-    "static/js/2.7d1edaad.chunk.js.LICENSE.txt": "/DetectiveBoard/static/js/2.7d1edaad.chunk.js.LICENSE.txt",
+    "static/css/main.f1857780.chunk.css.map": "/DetectiveBoard/static/css/main.f1857780.chunk.css.map",
+    "static/js/2.f9519daa.chunk.js.LICENSE.txt": "/DetectiveBoard/static/js/2.f9519daa.chunk.js.LICENSE.txt",
+    "static/media/bret-stiles.jpg": "/DetectiveBoard/static/media/bret-stiles.c9159350.jpg",
+    "static/media/brett-partridge.jpg": "/DetectiveBoard/static/media/brett-partridge.518a855b.jpg",
+    "static/media/california.jpg": "/DetectiveBoard/static/media/california.d7179731.jpg",
     "static/media/Board.css": "/DetectiveBoard/static/media/corkboard.6650586c.jpg",
-    "static/media/pin.png": "/DetectiveBoard/static/media/pin.a142205c.png"
+    "static/media/gale-bertram.jpg": "/DetectiveBoard/static/media/gale-bertram.284d980b.jpg",
+    "static/media/pin.png": "/DetectiveBoard/static/media/pin.a142205c.png",
+    "static/media/ray-haffner.jpg": "/DetectiveBoard/static/media/ray-haffner.555c260b.jpg",
+    "static/media/red-john.jpg": "/DetectiveBoard/static/media/red-john.1d2efd3e.jpg",
+    "static/media/reede-smith.jpg": "/DetectiveBoard/static/media/reede-smith.64f3f84a.jpg",
+    "static/media/robert-kirkland.jpg": "/DetectiveBoard/static/media/robert-kirkland.2ffccecd.jpg",
+    "static/media/thomas-mcallister.jpg": "/DetectiveBoard/static/media/thomas-mcallister.7967a755.jpg",
+    "static/media/visualize.jpg": "/DetectiveBoard/static/media/visualize.af9f44ef.jpg"
   },
   "entrypoints": [
     "static/js/runtime-main.b974a58f.js",
-    "static/js/2.7d1edaad.chunk.js",
-    "static/css/main.6bf433ad.chunk.css",
-    "static/js/main.03e9217f.chunk.js"
+    "static/js/2.f9519daa.chunk.js",
+    "static/css/main.f1857780.chunk.css",
+    "static/js/main.e214aeca.chunk.js"
   ]
 }
